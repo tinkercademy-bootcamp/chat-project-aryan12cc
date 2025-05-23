@@ -3,9 +3,10 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <cstring>
 
 int main() {
-  const int kPort = 8080;
+  const int kPort = 35000;
   sockaddr_in address;
   socklen_t addrlen = sizeof(address);
   const int kBufferSize = 1024;
@@ -14,7 +15,7 @@ int main() {
   int opt = 1;
   // Creating socket file descriptor
   if ((my_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-    std::cerr << "Socket creation erron\n";
+    std::cerr << "Socket creation error\n";
     return -1;
   }
   // Attaching socket to port
@@ -46,6 +47,7 @@ int main() {
       return -1;
     }
     // Wait for read
+    memset(buffer, 0, kBufferSize);
     ssize_t read_size = read(new_sock, buffer, kBufferSize);
     std::cout << "Received: " << buffer << "\n";
     // Send reply
