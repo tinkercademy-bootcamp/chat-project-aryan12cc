@@ -8,8 +8,10 @@
 - Bonus sections are more difficult and optional.
 - How can you find the information required to complete these tasks?
   - Google / Stack Overflow
+  - Official C++ Documentation (man pages for example)
 - How can you tell if the source of your information is good?
   - Good answers on Stack Overflow have a lot of positive votes. Furthermore, for Google, credible answers / web pages have a lot of references, hence, are one of the top links.
+  - Official C++ documentation is written by the team that works on releasing new versions of C++ themselves.
 - How would you define "good" in this situation?
   - Answers that have credibility from other users / people.
 
@@ -21,7 +23,7 @@
 - What are the most important command line arguments to learn for `g++`?
   - `-std` allows you to select the version of C++
   - `-o <filename>` allows you to name the executable to something other than `a.out`, which may be helpful while compiling different programs together in the same directory
-  - `-O2 / -O3 / -Ofast` allows you to direct the compiler to make optimizations, although it may take longer to compile. Furthermore, `Ofast` makes unsafe optimizations.
+  - `-O2 / -O3 / -Ofast` allows you to direct the compiler to make optimizations, although it may take longer to compile. Furthermore, `Ofast` enables unsafe optimizations.
 - What is the difference between debug vs release versions?
   - In the debug version, the developer ususally wants to go through what the code does in particular scenarios. Thus, a detailed debug report without any optimizations are used. Hence, the debug version can be significantly slower than the release version.
   - In the release version, the developer is putting out the code to the public, and hence, all optimizations are enabled for faster runtime.
@@ -33,7 +35,7 @@
   - `-O0` - For no optimizations
   - `-DDEBUG` - Defines the macro `DEBUG` which may be used to conditionally compile debug-only code.
 - What about for release?
-  - `-O2` - Optimizes the code by eliminating redundant expressions and evaluating constant expressions at constant times.
+  - `-O2 (or -O3)` - Optimizes the code by eliminating redundant expressions and evaluating constant expressions at constant times.
   - `-DNDEBUG` - Defines `NDEBUG` which doesn't allow assertions.
 - What other kinds of build types are useful?
   - Maybe Debugging while Releasing might seem as an option for developers to know what is happening during the release. So there can be a `Debug + Release` build type, especially for Alpha / Beta testing.
@@ -44,7 +46,8 @@
 - [Quickstart tutorial to make](https://makefiletutorial.com/) - Learn make 
   fundamentals with practical examples and common patterns.
 - How else can you learn about make?
-  - Google and Stack overflow!
+  - Google and Stack overflow
+  - [The official documentation of Make](https://www.gnu.org/software/make/manual/make.html)
 - How can you tell if the resource you are using is correct?
   - Credible answers are often backed up by upvotes or more references!
 - Create a makefile such that when you run `make` with no arguments, it will:
@@ -74,7 +77,7 @@
 - Commit and push your changes to git
 - Each commit should be responding to a single task or question
 - Why is it important to keep your commit to a single task or question?
-  - Commits can be represented as a milestone for the project. I think one should save every particular task achieved, which is why commits should be made to a single task.
+  - Commits can be represented as a progress chart for the project. One should save every particular task achieved (as that adds to the projects), which is why commits should be made to a single task.
 - Is it better to have a lot of very small commits, or one big commit when 
   everything is working?
   - A lot of small commits is better, since if something doesn't work in one of the commits, you still have some amount of progress. Furthermore, it's easier to debug as we know the commit to work on.
@@ -95,13 +98,13 @@
   `"hello message from the command prompt"` to the server
 - Commit your changes into git
 - What do all these headers do?
-  - `iostream` is for input and output from the terminal (`cin` and `cout`)
+  - `iostream` is for input and output from the terminal (`cin` and `cout`). It also includes output for error through `cerr`.
   - `string` is for `std::string` related operations
   - `cstring` is for C-string related operations (`memset` in this case)
-  - `sys/socket.h` is for socket-related operations (for TCP), like `bind`, `accept`, `send`, `recv`
-  - `netinet/in.h` defines IP address structures like `AF_INET`, `INADDR_ANY` etc.
-  - `arpa/inet.h` is for converting IP addresses from one order to another.
-  - `unistd.h` is for lower order operations like `fork()`, `getpid()`, `getppid()`. This is also useful for file operations I guess? (`read`, `close` etc.). Basically these are the functions called under the hood when we print something to the terminal for example (not sure how to describe it).
+  - `sys/socket.h` is for Internet-Protocol family operations ([as described here](https://pubs.opengroup.org/onlinepubs/7908799/xns/syssocket.h.html)), like `bind`, `accept`, `send`, `recv`
+  - `netinet/in.h` defines IP address structures like `AF_INET`, IP address, port number etc.
+  - `arpa/inet.h` is for definitions for internet operations. It has functions like `htonl()`, `htons()` etc. which converts values between host and network byte order.
+  - `unistd.h` defines miscellaneous symbolic constants and types like `fork()`, `getpid()`, `getppid()`. This is also useful for file operations (`read`, `close` etc.). We may also execute shell commands (with `exec` family commands) via C / C++ program itself!
 - How do you find out which part of the below code comes from which header?
   - `man <function name>` will show the header file the function belongs to. Furthermore, `Command + Right Click` on the function name in VS Code shows the header file.
 - How do you change the code so that you are sending messages to servers other than localhost?

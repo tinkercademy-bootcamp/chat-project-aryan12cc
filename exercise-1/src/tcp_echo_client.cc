@@ -8,16 +8,23 @@
 
 int main(int argc, char* argv[]) {
   // #Question - are these the same type?
-  // No -- message is a std::string, while "Hello from client" is a char* (array of characters)
+  // No -- message is a std::string, while "Hello from client" is a char* (array of characters, also known as a cstring)
   std::string message = "";
-  if(argc == 2) {
-    message = argv[1];
+  if(argc >= 2) {
+    for(int i = 1; i < argc; i++) {
+      message += argv[i]; // add argument (word)
+      if(i != argc - 1) {
+        message += " "; // add space if it is not the last word
+      }
+    }
   }
   else {
     message = "Hello from client!";
   }
   const int kPort = 35000;
-  const std::string kServerAddress = "3.6.61.177";
+  // Change the server address below to another server address (eg. 13.204.12.159 to access Arya's server)
+  // Ensure client and server port is the same, as data is transferred to a combination of IP and port (<IP>:<port>)
+  const std::string kServerAddress = "15.207.74.244";
   sockaddr_in address;
   const int kBufferSize = 1024;
   char buffer[kBufferSize] = {0};
