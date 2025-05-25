@@ -110,6 +110,7 @@
 - How do you change the code so that you are sending messages to servers other than localhost?
   - In the client, change the IP address to the address you want to send it to (the address of the server). Since the data is transferred to `IP:port`, it is essential to ensure that the `port` is also the same when communicating.
 - How do you change the code to send to a IPv6 address instead of IPv4?
+  - In the client code, we change the server address to its IPv6 address. Furthermore, for both client and server, we change all socket / IP operations to support IPv6 instead of IPv6 (for example, `AF_INET6`, `sockaddr_in6` etc).
 - **Bonus**: How do you change the client code to connect by hostname instead of IP address?
   
 ## Introduction to Memory Management
