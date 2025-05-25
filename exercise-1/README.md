@@ -112,6 +112,8 @@
 - How do you change the code to send to a IPv6 address instead of IPv4?
   - In the client code, we change the server address to its IPv6 address. Furthermore, for both client and server, we change all socket / IP operations to support IPv6 instead of IPv6 (for example, `AF_INET6`, `sockaddr_in6` etc).
 - **Bonus**: How do you change the client code to connect by hostname instead of IP address?
+  - First, I tried `gethostbyname()` method, which gives the IPv4 address of the host (considering we have the hostname of the server) using `h_addr_list[]` (list of all IP addresses). I knew there was a `gethostbyname()` method, thus, just looked up the man page and got the information.
+  - Curiously, I wanted to find how to get IPv6 addresses. `gethostbyname()` is depracated, and redirects to `getaddrinfo()`, which provides the IPv6 addresses as well.
   
 ## Introduction to Memory Management
 
