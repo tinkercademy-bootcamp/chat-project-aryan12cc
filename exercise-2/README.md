@@ -12,6 +12,7 @@
   overview and protocol families
 - Or type `man 7 socket` in terminal
 - When would you want to use a `SOCK_RAW` stream?
+  - I would use `SOCK_RAW` stream if I wanted to implement a different IP protocol other than TCP / UDP. This gives me access to the low level details of communicating with another host (any device -- computer, mobile etc.), which may be used to optimize communication since it may be so that the protocol (TCP / UDP) being used is not the most effective way to communicate.
 
 ### TCP and IP Protocols
 - [IPv4](https://www.rfc-editor.org/info/rfc791) - Internet Protocol 
@@ -25,17 +26,27 @@
 - [C++23 ISO standard draft](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/n4950.pdf) - 
   Working draft of the C++ language specification
 - Is the above the official C++23 spec? 
+  - No, it is a working draft.
 - Where is the official C++23 spec?
+  - [Official C++23 spec](https://www.iso.org/standard/83626.html)
 - Why was this link chosen instead?
+  - The official spec is pay to use. The link chosen is a draft and is freely available publicly.
 - Is this a helpful reference for learning C++?
-- Can the various implementations of C++ compilers be different from the
-  C++ standard?
+  - For beginner stage, no. This is because it is full of jargon that a newcomer won't understand.
+  - For advanced developers, yes. This allows the developers to delve deeper into the meaning and syntax of C++ related coding practicies.
+- Can the various implementations of C++ compilers be different from the C++ standard?
+  - Yes. The way a compiler is implemented is upto the author / developer / maintainer of the compiler. That being said, The compiler should be according to the C++ standard.
 - What are the most widely used and most significant C++ compilers?
+  - GCC / G++
+  - Clang
 - Where is the equivalent spec for C++26?
+  - The official spec hasn't been released since C++26 hasn't been released. The draft can be found [here](https://github.com/cplusplus/draft).
 
 - Where do you find the spec for the HTTP protocol?
+  - [IETF website](https://datatracker.ietf.org/doc/html/rfc2616)
 - What about HTTPS? Is there a spec for that protocol?
-
+  - HTTPS is essentially HTTP with Transport Layer Security (TLS) to secure connections. This can be found [here](https://datatracker.ietf.org/doc/html/rfc2818).
+   
 ## Introduction to C++ and Sockets Programming
 
 - Read the code in `src/`
