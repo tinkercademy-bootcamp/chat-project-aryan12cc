@@ -119,29 +119,52 @@
 
 - What is happening in line 26 of `tcp-echo-client.cc`? 
   `if (inet_pton(AF_INET, kServerAddress.c_str(), &address.sin_addr) <= 0) {`
+  - Converts the `kServerAddress` from text to network byte order in `address.sin_addr`.
 - What is happening in line 31 of `tcp-echo-client.cc`?
   `if (connect(my_sock, (sockaddr *)&address, sizeof(address)) < 0) {`
+  - Attempts to establish a connection from the client to the server at the address specified by the `address` structure. This is done via sockets, and the connection that is being established is TCP.
 - What is the difference between a pointer and a reference?
+  - Pointers contain the memory address of another variable. For example, `int* p = &a` stores the address of the location where the variable `a` is stored. After initialization, pointers may be changed to point to the address of other variables (or null).
+  - References are aliases of the variables. Once set during initialization, it cannot be changed.
 - When is it better to use a pointer?
+  - The variable can be null
+  - You may want to reassign later
+  - Working with dynamic memory
 - When is it better to use a reference?
+  - The variable can never be null
+  - You do not reassign later
 - What is the difference between `std::string` and a C-style string?
+  - `std::string` is a class to represent sequences of characters. Explicitly stores the length of the string, thus `s.size()` is `O(1)` time complexity. It also allows allocation de-allocation of memory, something which C-style string does not.
 - What type is a C-style string?
+  - `char*`
 - What happens when you iterate a pointer?
+  - Iterating a pointer skips as many bytes as the type of element it points to. Thus, doing `ptr++` when `ptr` points to an `int` makes `ptr++` go 4 memory addresses ahead. If it was pointing to a `char`, it would go to 1 memory address ahead.
 - What are the most important safety tips to know when using pointers?
+  - Correctly referencing and de-referencing them. When using the value of the pointers, we should always ensure that the pointer is not pointing to NULL, else it may lead to runtime errors.
 
 ## Learn Basics of Creating a C++ Project in Your IDE
 
 - How do you compile and run your project in your IDE?
+  - Type `make` in the terminal in `./exercise-1`
+  - Type `build/server.out` and `build/client.out` in `./exercise-1`. Preferably on two different terminals.
 
 ## Improving Interactions with LLMs
 
 - What is the most authoritative source of information about `socket()`
   from `<sys/socket.h>`?
+  - `man socket`
 - What is the most authoritative source of information about the TCP and IP
   protocols?
+  - `man tcp`
+  - RFC Editor
 - What is the most authoritative source of information about the C++
   programming language?
+  - CPP Reference
 - What information can you find about using Markdown when structuring prompts 
   to LLMs?
+  - Markdown allows LLMs to "de-reference" the prompt better into different parts (heading, information, question etc.). Hence, typing the prompt in Markdown is generally better.
 - What is the difference between LLM and AI?
+  - LLMs are language models that understand, process, and hence, generate the relative information given to it in human language.
+  - AI is the field of technology that tries to perform tasks done by humans, and which typically require some "thinking"
 - Is it grammatically correct in English to say "a LLM" or "an LLM"? Why?
+  - An LLM. LLM = el-el-em. The first sound of `e` makes it gramatically correct to say an LLM in English.

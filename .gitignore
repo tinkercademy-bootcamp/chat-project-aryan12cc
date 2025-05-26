@@ -65,3 +65,6 @@ build/
 /.classpath
 /.project
 /.settings/
+
+# ignore -- used for trying random stuff shown in cppcon
+try*
