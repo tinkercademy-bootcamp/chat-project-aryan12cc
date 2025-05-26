@@ -34,17 +34,25 @@ int main(int argc, char* argv[]) {
 
   // Get host by name (connect by hostname)
   std::string hostName = "ip-172-31-21-18";
-  struct hostent* hostNameStruct = gethostbyname(hostName.c_str());
+  // Using addrinfo for ip by hostname
+  addrinfo hints{};
+  addrinfo* res{};
+  hints.ai_socktype = SOCK_STREAM; // TCP connections basically
+  hints.ai_family = AF_INET; // or AF_INET6
 
-  std::string IPBuffer = inet_ntoa(*((struct in_addr*)hostNameStruct->h_addr_list[0]));
-  std::cout << IPBuffer << std::endl;
+  int s = getaddrinfo(hostName.c_str(), std::to_string(kPort).c_str(), &hints, &res);
+  if(s != 0) {
+    std::cout << "Error:" << gai_strerror(s) << std::endl;
+    return -1;
+  }
   
   sockaddr_in address; // IPv4
   // sockaddr_in6 address; // IPv6
   const int kBufferSize = 1024;
   char buffer[kBufferSize] = {0};
   // Creating socket file descriptor
-  int my_sock = socket(AF_INET, SOCK_STREAM, 0); // IPv4
+  int my_sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+  // int my_sock = socket(AF_INET, SOCK_STREAM, 0); // IPv4
   // int my_sock = socket(AF_INET6, SOCK_STREAM, 0); // IPv6
   if (my_sock < 0) {
     std::cerr << "Socket creation error\n";
@@ -55,14 +63,15 @@ int main(int argc, char* argv[]) {
   address.sin_port = htons(kPort); // IPv4
   // address.sin6_port = htons(kPort); // IPv6
   // Convert IPv4 and IPv6 addresses from text to binary form
-  if (inet_pton(AF_INET, IPBuffer.c_str(), &address.sin_addr) <= 0) { // IPv4 -- by host
+  // if (inet_pton(AF_INET, IPBuffer.c_str(), &address.sin_addr) <= 0) { // IPv4 -- by host
   // if (inet_pton(AF_INET, kServerAddress.c_str(), &address.sin_addr) <= 0) { // IPv4
   // if (inet_pton(AF_INET6, kServerAddress.c_str(), &address.sin6_addr) <= 0) { // IPv6
-    std::cerr << "Invalid address/ Address not supported\n";
-    return -1;
-  }
+  //   std::cerr << "Invalid address/ Address not supported\n";
+  //   return -1;
+  // }
   // Connect to the server
-  if (connect(my_sock, (sockaddr *)&address, sizeof(address)) < 0) {
+  // if (connect(my_sock, (sockaddr *)&address, sizeof(address)) < 0) { // for IP connections
+  if(connect(my_sock, res->ai_addr, res->ai_addrlen) < 0) {
     std::cerr << "Connection Failed\n";
     return -1;
   }
