@@ -3,6 +3,7 @@
 # =====================
 .DS_Store
 Thumbs.db
+.vscode
 
 # Compiled Object files
 *.d
@@ -30,6 +31,7 @@ Thumbs.db
 *.lib
 
 # Executables
+build/
 *.exe
 *.out
 *.app
@@ -64,3 +66,6 @@ Thumbs.db
 /.classpath
 /.project
 /.settings/
+
+# ignore -- used for trying random stuff shown in cppcon
+try*
