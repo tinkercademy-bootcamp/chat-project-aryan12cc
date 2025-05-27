@@ -26,6 +26,7 @@
   - I see that there are more functions of the type `.LC*` and `.L*`. According to [Stack Overflow](https://stackoverflow.com/questions/78594236/what-does-lc-and-l-mean-and-what-is-its-purpose-in-assembly), `.LC*` is used for constants and `.L*` is used internally to handle branch prediction, cleanup etc.
   - In the old `create_socket()` code, the majority of the assembly computation is happening in `my_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0`, where the code sets the parameters (registers have a specific order when a function is called), for example `%rax` will only store the answer, `%rdi` and `%rsi` for 1st and 2nd arguments, etc. Here, it is `eax`, `edi`, `esi` because of 32-bit vs 64-bit register architecture.
   - In the new version `check_error(my_sock < 0, "Socket creation error");` takes up majority of the assembly code. A lot of `mov` commands before `check_error` and inside `check_error` means that the compiler is accessing a lot of register values from the memory, which basically is the "overhead" talked about earlier.
+  - On further digging, in the new code, `basic_string` class is being called multiple times. Thus, in the new code, the compiler actually has to create a new object of `std::string` and subsequently clean it up after the code finishes.
 - Can you think of any different approaches to this problem?
 - How can you modify your Makefile to generate assembly code instead of
   compiled code?
