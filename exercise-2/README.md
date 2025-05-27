@@ -35,7 +35,7 @@
   - For beginner stage, no. This is because it is full of jargon that a newcomer won't understand.
   - For advanced developers, yes. This allows the developers to delve deeper into the meaning and syntax of C++ related coding practicies.
 - Can the various implementations of C++ compilers be different from the C++ standard?
-  - Yes. The way a compiler is implemented is upto the author / developer / maintainer of the compiler. That being said, The compiler should be according to the C++ standard.
+  - Yes. The way a compiler is implemented is upto the author / developer / maintainer of the compiler. That being said, the compiler should be according to the C++ standard.
 - What are the most widely used and most significant C++ compilers?
   - GCC / G++
   - Clang
@@ -46,12 +46,17 @@
   - [IETF website](https://datatracker.ietf.org/doc/html/rfc2616)
 - What about HTTPS? Is there a spec for that protocol?
   - HTTPS is essentially HTTP with Transport Layer Security (TLS) to secure connections. This can be found [here](https://datatracker.ietf.org/doc/html/rfc2818).
-   
+
 ## Introduction to C++ and Sockets Programming
 
 - Read the code in `src/`
 - Are there any bugs in this code? 
+  - If there were multiple arguments (say `./build/client.out I am`), only `I` was being sent. Although, I believe, the intent was to keep the message within quotation marks.
+  - An empty message like `./build/client.out ""` would make the client send a message of length 0 and wait for a response. This is because the client is sending a `cstring` of length 1 consisting of `\0` while the server is sending a `std::string` of length `0` which never gets "sent".
+  - 
 - What can you do to identify if there are bugs in the code?
+  - For this exercise, I tested it on various inputs
+  - On bigger software development projects, one can have a testing system to test the critical flows of the system.
 
 ## Refactoring: Extract Function
 

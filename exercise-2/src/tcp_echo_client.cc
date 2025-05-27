@@ -68,7 +68,18 @@ std::string read_args(int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
   if (argc > 1) {
-    message = argv[1];
+    message = "";
+    for(int i = 1; i < argc; i++) {
+      message += argv[i];
+      if(i != argc - 1) {
+        message += " ";
+      }
+    }
+  }
+
+  if(message.size() == 0) {
+    std::cout << "Please send a non-empty message\n";
+    exit(EXIT_FAILURE);
   }
   return message;
 }
