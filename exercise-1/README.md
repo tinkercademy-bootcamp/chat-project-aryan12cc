@@ -12,6 +12,7 @@
 - How can you tell if the source of your information is good?
   - Good answers on Stack Overflow have a lot of positive votes. Furthermore, for Google, credible answers / web pages have a lot of references, hence, are one of the top links.
   - Official C++ documentation is written by the team that works on releasing new versions of C++ themselves.
+  - [Official C++ Documentation](https://www.iso.org/standard/83626.html). Although, this is paid. For a free for public use version, one of its [drafts](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/n4950.pdf) also works. 
 - How would you define "good" in this situation?
   - Answers that have credibility from other users / people.
 
