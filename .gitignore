@@ -2,6 +2,7 @@
 # General 
 # =====================
 .DS_Store
+.vscode
 Thumbs.db
 
 # Compiled Object files
