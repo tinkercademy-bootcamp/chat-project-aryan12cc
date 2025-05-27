@@ -43,6 +43,7 @@ void connect_to_server(int sock, sockaddr_in &server_address) {
 void send_and_receive_message(int sock, const std::string &message) {
   const int kBufferSize = 1024;
   // #Question - is buffer the best name we can use?
+  // receive_message_buffer would be better
   char buffer[kBufferSize] = {0};
 
   // Send the message to the server
@@ -61,6 +62,8 @@ void send_and_receive_message(int sock, const std::string &message) {
 }
 
 // #Question - what can be improved in this function?
+// In the original version, I think <message> should be in double quotes.
+// Instead of <message>, one may also write <non-empty message>
 std::string read_args(int argc, char *argv[]) {
   std::string message = "Hello from client";
   if (argc == 1) {

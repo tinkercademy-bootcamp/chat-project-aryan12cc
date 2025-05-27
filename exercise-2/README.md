@@ -61,9 +61,15 @@
 ## Refactoring: Extract Function
 
 - What is different in this code compared to exercise-1?
+  - The code in `tcp_echo_client.cc` and `tcp_echo_server.cc` is more modular - it is broken down into functions which serve different purposes while communicating with the client.
 - Is this code better or worse than exercise-1?
+  - Better.
 - What are the tradeoffs compared to exercise-1?
+  - The modular code helps in testing, readability, coding in the future / for other developers etc.
+  - A drawback of modular code is the code size. For example, there is a difference of 30 lines in the server codes between exercise 1 and 2.
 - Are you able to spot any mistakes or inconsistencies in the changes?
+  - I could not spot any mistake in the changes. The 
+  - A mistake I needed to fix in Exercise 1 was that if I had a message "Hello" and then "Hi", since the buffer wasn't cleared, the second message would be printed as "Hillo". The modular code removes this error by giving each connection its own buffer.
   
 ## Thinking About Performance
 
