@@ -12,6 +12,7 @@
 - Are there any costs to writing code like this?
   - There will be increased function calls, which may result in a larger overhead.
   - Debugging will be slightly harder when it goes to the `check_error()` function, as it makes it a bit more convoluted.
+  - If a different flow of events need to be followed after the error, the author will need to write a separate error code.
 - Apply `check_error` to all the code in `src/`
 
 ## Introduction to Compiler Explorer
