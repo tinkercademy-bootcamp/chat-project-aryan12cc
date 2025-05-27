@@ -115,6 +115,8 @@
 
 - How do you see the memory layout of a `std::string` from your IDE debug mode?
   - Printing `&s` where `s` is an `std::string` gives the address of the `std::string` object. To get where the data is located, `p s.c_str()`. Then `x/32xb` from that address onwards gives the next 32 bytes from that address.
+  - On a side note, disabling pretty print in VS Code, allows us to check the internal implementation of `std::string`. There is a member variable called `_M_p` which stores the address of the string. To get the memory layout, we can do `x/32xb <address>`.
 - How do you see the memory layout of a struct from your IDE debug mode?
   - Same as `std::string`. Printing `&s` where `s` is the struct gives the address of the `struct` object. Then `x/32xb` from that address onwards gives the next 32 bytes from that address. 
   - Both `struct` and `std::string` (as far as I know) are stored continuously. To optimise, there may be padding between member variables in `struct`.
+  - To get the address of the struct `&struct_name` was printed in the code.
