@@ -97,9 +97,19 @@
 ## Learn Basics of Debugging in Your IDE
 
 - How do you enable debug mode in your IDE?
+  - Install `gdb`. Change the Makefile to add `-g` flag while compiling. Configure `launch.json` with the executables to be run.
 - In debug mode, how do you add a watch?
+  - In the run and debug panel, there is a watch section. Clicking on the `+` button allows us to type in an expression to watch.
 - In debug mode, how do you add a breakpoint?
+  - To the left of the code, the subsequent line numbers are shown. There is a small gap between the window and the line number. Hovering over the gap enables a red dot, clicking on which enables a breakpoint on that line.
 - In debug mode, how do you step through code?
+  - There is a small GUI with symbols. There are 6 symbols as follows:
+    - Continue / Pause (F5 shortcut)
+    - Step Over (F10)
+    - Step Into (F11)
+    - Step Out (Shift + F11)
+    - Restart (Shift + Cmd + F5)
+    - Stop (Shift + F5)
 
 ### Memory Management and Debug Mode in Your IDE
 
