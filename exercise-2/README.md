@@ -74,8 +74,13 @@
 ## Thinking About Performance
 
 - Does writing code this way have any impact on performance?
+  - Human performance, yes, since it saves a lot of time for future developers.
+  - Computer performance, not really. It has a negative effect since there may be a lot of jumping between functions which may induce an overhead.
 - What do we mean when we say performance?
+  - Here, I mean computer performance and human performance (how much time it takes a human to read, understand, and modify code)
 - How do we measure performance in a program?
+  - Human performance can be measured by the amount of time taken to maintain and refactor the code.
+  - Computer performance can be measured by profiling tools like CProfile, `std::chrono`, `./time` etc.
 
 ## Play with Git
 
