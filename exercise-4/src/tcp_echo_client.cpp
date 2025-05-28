@@ -1,3 +1,5 @@
+#include "net_operations/net_operations.h"
+
 #include <arpa/inet.h>
 #include <cstdlib>
 #include <iostream>
@@ -7,18 +9,18 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void check_error(bool test, std::string error_message) {
-  if (test) {
-    std::cerr << error_message << "\n";
-    exit(EXIT_FAILURE);
-  }
-}
+// void check_error(bool test, std::string error_message) {
+//   if (test) {
+//     std::cerr << error_message << "\n";
+//     exit(EXIT_FAILURE);
+//   }
+// }
 
-int create_socket() {
-  int sock = socket(AF_INET, SOCK_STREAM, 0);
-  check_error(sock < 0, "Socket creation error\n");
-  return sock;
-}
+// int create_socket() {
+//   int sock = socket(AF_INET, SOCK_STREAM, 0);
+//   check_error(sock < 0, "Socket creation error\n");
+//   return sock;
+// }
 
 sockaddr_in create_address(const std::string &server_ip, int port) {
   sockaddr_in address;
