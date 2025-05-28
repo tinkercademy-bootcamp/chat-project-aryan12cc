@@ -38,7 +38,9 @@ fundamentals with practical examples and common patterns.
 
 ## Experiments in Performance
 
-- Is it better to have many small files spread across many directories, or
-  a few large files across fewer directories?
+- Is it better to have many small files spread across many directories, or a few large files across fewer directories?
+  - It is better to have many small files spread across many directories for ease of readability. It also ensures that the logic of the application is separated out conveniently between the files, with the name of each file indicating what logic it is serving.
 - Is there a difference in compilation time between the two?
+  - The compilation time of many small files spread across many directories will be much more than a few large files. Overtime, since the entire codebase is not changed, but only a part of it, the compilation time of smaller files will be faster as only those files need to be re-compiled over and over again given that tools like Make are used in such applications to compile and link the files.
 - How can you assess performance other than compilation speed?
+  - One way to assess performance is the execution time of the codebase. How long the code takes to execute a single instruction provided by the user. This also affects the response time, which is a defining part of the User Experience of the application.
