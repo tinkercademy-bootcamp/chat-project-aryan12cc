@@ -24,10 +24,13 @@
 ### Compiling vs Linking
 
 - What is the difference between compiling and linking in C++?
-- What is the difference between creating an executable and creating a 
-  library?
-- How do you compile a library, and then use that library to compile an
-  executable?
+  - Compiler compiles the individual source files to their corresponding object files
+  - Linker takes all the object files and combines them into one final executable
+- What is the difference between creating an executable and creating a library?
+  - An executable is a single binary file that can be run.
+  - A library is a collection of precompiled code which cannot be run individually. It is meant for re-use in other programs.
+- How do you compile a library, and then use that library to compile an executable?
+  - Compile the `.cpp` files to object files using `-c` flag. We can use the `ar` command to create a static library from the `.o` files, and use the `-L.` to check the current directory and `-l<libname>` flag to check for the respective library (for example, `-lfft` for `libfft.a`).
 
 ### Reminder 
 [Quickstart tutorial to make](https://makefiletutorial.com/) - Learn make 
