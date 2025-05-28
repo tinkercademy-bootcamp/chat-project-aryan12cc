@@ -12,14 +12,6 @@ void set_socket_options(int sock, int opt) {
   check_error(err_code < 0, "setsockopt() error\n");
 }
 
-sockaddr_in create_address(int port) {
-  sockaddr_in address;
-  address.sin_family = AF_INET;
-  address.sin_addr.s_addr = INADDR_ANY;
-  address.sin_port = htons(port);
-  return address;
-}
-
 void bind_address_to_socket(int sock, sockaddr_in &address) {
   auto err_code = bind(sock, (sockaddr *)&address, sizeof(address));
   check_error(err_code < 0, "bind failed\n");
@@ -58,7 +50,7 @@ void handle_accept(int sock) {
 }
 
 void handle_connections(int sock, int port) {
-  sockaddr_in address = create_address(port);
+  sockaddr_in address = create_address(std::nullopt, port);
   socklen_t address_size = sizeof(address);
 
   while (true) {
@@ -71,7 +63,7 @@ void handle_connections(int sock, int port) {
 int main() {
   const int kPort = 8080;
   int my_socket = create_socket();
-  sockaddr_in address = create_address(kPort);
+  sockaddr_in address = create_address(std::nullopt, kPort);
 
   start_listening_on_socket(my_socket, address);
   std::cout << "Server listening on port " << kPort << "\n";

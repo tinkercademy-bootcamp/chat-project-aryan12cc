@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <netinet/in.h>
+#include <optional>
 
 template <typename T, typename S> void check_error(T test, S error_message) {
   if (test) {
@@ -13,5 +14,6 @@ template <typename T, typename S> void check_error(T test, S error_message) {
 }
 
 int create_socket();
+sockaddr_in create_address(std::optional<std::string> ip_address, int port);
 
 #endif
