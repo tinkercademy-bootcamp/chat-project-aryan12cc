@@ -6,7 +6,14 @@
 
 - Move code that can be shared between `tcp_echo_server.cc` and 
   `tcp_echo_client.cc` to separate `.h` and `.cc` files
+  - Updated `src/` folder.
 - How would you compile from the command line?
+  - From `./exercise-4` run the following two commands:
+    - `g++ -std=c++23 src/tcp_echo_server.cpp src/net_operations/net_operations.cpp -o build/server.out`
+    - `g++ -std=c++23 src/tcp_echo_client.cpp src/net_operations/net_operations.cpp -o build/client.out`
+  - The executables will be in the `build` directory
+    - The server executable will be `build/server.out`
+    - The client executable will be `build/client.out`
 - How would you compile using make?
 - How would you compile using VS Code?
 
