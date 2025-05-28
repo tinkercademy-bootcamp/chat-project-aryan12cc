@@ -1,7 +1,7 @@
 SRC_FILES := $(wildcard src/tcp_echo_*.cc)
 OUTPUTS := $(patsubst src/tcp_echo_%.cc, build/%.out, $(SRC_FILES))
 BUILD_FOLDER := build
-CXX_FLAGS := -g -fsanitize=address
+CXX_FLAGS := -std=c++23 -g -fsanitize=address
 LD_FLAGS := -fsanitize=address
 
 all: $(BUILD_FOLDER) $(OUTPUTS)
