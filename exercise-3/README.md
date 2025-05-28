@@ -30,10 +30,13 @@
 - Can you think of any different approaches to this problem?
 - How can you modify your Makefile to generate assembly code instead of
   compiled code?
+  - We can add the `-S` flag while compiling to stop at the assemble phase and give us a `.s` (assembly) code for the program. Here, we also need to ensure to remove the `-o` directive of naming the executable.
 - **Note**: You can save the generated assembly from Compiler Explorer
 - **Bonus**: Can you view assembly code using your IDE?
+  - On opening the `.s` file, we can view the assembly code.
 - **Bonus**: How do you see the assembly when you step through each line in
   debugging mode from your IDE?
+  - `layout regs` in gdb gives the register values and you can see it change as and when you move through each line.
 - [x86 assembly reference](http://ref.x86asm.net/) - Comprehensive reference 
   for x86 assembly language instructions and syntax
 
