@@ -59,18 +59,22 @@
 - Where is the text in your `std::string`?
   - For short strings, it is stored with the `std::string` object for faster access. For longer strings,it is stored on the heap and `std::string` just has a pointer to the location where the data is stored.
 - What is `std::optional`?
+  - `std::optional` allows an object of a particular data type to be present or not to be present. So the "variable" may be NULL, or may actually be assigned to a particular value. Unlike pointers, it actually "owns" the variable and doesn't point to the memory location containing the variable.
 - How do you find out the memory layout of a `std::optional`?
-- Read https://en.cppreference.com/w/cpp/memory#Smart_pointers - Guide to 
-  modern C++ memory management using smart pointers
+  - I used the GDB CLI to get the memory address of the `std::optional` variable and how it is stored. Basically `std::optional` has the variable and a flag. The flag is set to 1 when the value contained is valid. Else, the flag is set to 0.
+- Read https://en.cppreference.com/w/cpp/memory#Smart_pointers - Guide to modern C++ memory management using smart pointers
 - Which pointer types are the most important to know about?
+  - `std::unique_ptr`
+  - `std::shared_ptr`: Multiple pointers can "own" a particular object. The object is destroyed when the last pointer pointing to the object gets destroyed.
 - Which smart pointer should you use by default if you can?
-- Does changing your optimization level in `CXXFLAGS` from `-O0` to `-O3` have
-  any impact on the answers to any of the above questions?
+  - `std::unique_ptr`. This ensures that every object is pointed / "owned" by a single pointer only. It helps define clear semantics as to which pointer owns a particular object.
+- Does changing your optimization level in `CXXFLAGS` from `-O0` to `-O3` have any impact on the answers to any of the above questions?
+  - The memory layout may vary majorly as there maybe some changes / reordering done in the memory in order to aggressively optimize the code.
 
 ## More Thinking About Performance
 
-- After your experiments with Compiler Explorer, do you have any updates for
-  your answers in exercise-2?
+- After your experiments with Compiler Explorer, do you have any updates for your answers in exercise-2?
+  - In highly optimized codes, it may actually be better to not make the code very modular because of the overhead incurred. In general, I think there should be a good balance between maintaining the code and modularizing the code, so that new developers can easily understand, whilst also ensuring that the code is highly modular.
 
 ### Bonus: Do Not Watch Now 
 
