@@ -15,7 +15,11 @@
     - The server executable will be `build/server.out`
     - The client executable will be `build/client.out`
 - How would you compile using make?
+  - Updated Makefile. Notably, declared another variable called `COMMON_FILES` which contains `src/net_operations/net_operations.cpp`.
 - How would you compile using VS Code?
+  - Add a task in the `.vscode` folder at the root directory of the project. This can be done by creating a `tasks.json` file within the `.vscode` folder.
+  - The tasks will contain arguments to compile the programs of client and server.
+  - Command + Shift + B will execute the tasks, thus compiling the programs.
 
 ### Compiling vs Linking
 
