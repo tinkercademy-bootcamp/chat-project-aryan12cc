@@ -28,6 +28,8 @@
   - In the new version `check_error(my_sock < 0, "Socket creation error");` takes up majority of the assembly code. A lot of `mov` commands before `check_error` and inside `check_error` means that the compiler is accessing a lot of register values from the memory, which basically is the "overhead" talked about earlier.
   - On further digging, in the new code, `basic_string` class is being called multiple times. Thus, in the new code, the compiler actually has to create a new object of `std::string` and subsequently clean it up after the code finishes.
 - Can you think of any different approaches to this problem?
+  - Not really. Instead of passing by value, one may pass by reference so that the string is not copied, but directly moved. The string is not being initialized again, so it doesn't affect the rest of the code.
+  - Instead of `std::string`, one may also use `char*` since then, a constructor and destructor will not be called.
 - How can you modify your Makefile to generate assembly code instead of
   compiled code?
   - We can add the `-S` flag while compiling to stop at the assemble phase and give us a `.s` (assembly) code for the program. Here, we also need to ensure to remove the `-o` directive of naming the executable.
@@ -45,10 +47,17 @@
 - Make sure you have `-fsanitize=address` in both your `CXX_FLAGS` and 
   `LD_FLAGS` in your Makefile
 - What do `-fsanitize=address`, `CXX_FLAGS` and `LD_FLAGS` mean?
-- With the new tool of the Compiler Explorer, and keeping in mind what you 
-  have learned about how to use debug mode
+  - `-fsanitize=address` is a flag for fast memory error detector. It can detect the following memory errors:
+    - Out of bounds
+    - Use after free
+    - Double free etc.
+  - `CXX_FLAGS` is a variable to store all the flags to be used while compiling in C++
+  - `LD_FLAGS` is a variable to store all the flags to be used while linking different object files.
+- With the new tool of the Compiler Explorer, and keeping in mind what you have learned about how to use debug mode
 - What happens when you look at a `std::string` using the above methods?
+  - The text of `std::string` might not be stored with the `basic_string` object itself. `std::string` is an object of `basic_string`, and has certain member functions like `_M_string_length`, `_M_p` etc. For large text, the string holds a pointer to the text, which is stored at another location (on the heap).
 - Where is the text in your `std::string`?
+  - For short strings, it is stored with the `std::string` object for faster access. For longer strings,it is stored on the heap and `std::string` just has a pointer to the location where the data is stored.
 - What is `std::optional`?
 - How do you find out the memory layout of a `std::optional`?
 - Read https://en.cppreference.com/w/cpp/memory#Smart_pointers - Guide to 
