@@ -41,7 +41,14 @@
 - **Note**: You don't have to use the code in this exercise as a starting point
 - You can use the code you wrote from previous exercises instead
 - How should you divide the code into files?
+  - We should divide the code such that each file is a "class" or a "functional unit" by itself. It does most of the interactions internally, and very few interactions go to other external files. Similar classes operating under the same purpose in the code flow can be grouped together in the same directory, with the name of the directory being something similar to what the purpose is.
 - What namespace and directory structure should you use? Why?
+  - There should be separate `src/`, `build/` and `tests/` folders. Furthermore, a `Makefile` should be present in the root directory. This is for the ease of testing, executing and changing the codebase. It basically ensures that the executables don't interfere with the codebase or the testing, whilst also ensuring the same for testing and codebase.
+    - `src/` should contain the codebase
+    - `build/` should contain all the executables. `make all` should create this directory, while `make clean` should remove it.
+    - `tests/` should contain all the tests used to ensure program / application correctness
+  - The best I can think of for namespace structure is to follow the directory structure. This will prevent any clashes, and, if followed by the developer, will easily explain the purpose of the particular file in the codebase, just by looking at the namespace.
+
 
 ## Programming Sense of Taste
 
