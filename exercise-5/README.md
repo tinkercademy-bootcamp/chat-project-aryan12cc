@@ -15,7 +15,14 @@
 
 - Here is one way to separate out the code into multiple files
 - Is this the best way to do it? 
+  - I think classes could be used to separate the concerns (logic) in a better manner instead of namespace, since the member functions and variables in a class should usually be strongly related with one another, coming together as a whole to create objects. One may also use the fact that there can be multiple clients so it might be better just to create a client object everytime.
+  - One way I like to think about it (didn't find it anywhere though), is that namespaces should define a broader group which has related functionality. Classes should define a small / medium sized group which is very cohesive in nature. As in, the data members and variables should ideally interact a lot between one another, and not that much when used outside.
+  - Furthermore, the way namespace was used in the code is a bit weird
+    - The separation of logic into namespaces is not the best in the code preovided
+    - For example, clients and server are the two main separation of logic points apart from sockets / network. The way namespace is used in clients and server is very different -- clients don't even have a namespace for that matter.
 - What are the advantages and disadvantages?
+  - I think namespaces are mainly used to organize code into broad groups. Useful naming can also be used to give an idea about the namespace
+  - Nested namespaces / badly named namespaces can be as hard to understand as its easy for namespaces to organise code. In general, readability decreases when someone uses something like `ns1::ns2::ns3::ns4::var1`.
 
 ## Introduction to Namespace
 
