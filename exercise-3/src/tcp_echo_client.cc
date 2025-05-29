@@ -50,11 +50,12 @@ void send_and_receive_message(int sock, const std::string &message) {
 
   // Receive response from the server
   ssize_t read_size = read(sock, buffer, kBufferSize);
-  check_error(read_size < 0, "Read error");
   if (read_size > 0) {
     std::cout << "Received: " << buffer << "\n";
   } else if (read_size == 0) {
     std::cout << "Server closed connection.\n";
+  } else {
+    std::cerr << "Read error\n";
   }
 }
 
