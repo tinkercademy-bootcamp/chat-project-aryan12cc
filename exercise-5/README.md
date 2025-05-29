@@ -27,7 +27,13 @@
 ## Introduction to Namespace
 
 - There are different ways namespace is being used in this exercise
+  - Unnamed namespaces are used, where a chunk of code is just being declared within a namespace and the namespace has not been given a name
+  - `using` keyword has been used, in which if we type `using namespace xyz`, we don't need to add the prefix `xyz::` to any of the member variables of that namespace
+  - `namespace x = y` has been used. Instead of appending the prefix `y::`, we can not append the prefix `x::`
 - Which way is better? What are the advantages and disadvantages?
+  - Unnamed namespaces just work for the current file (and any other file that is being referred as a header). Thus, it prevents symbol collissions. The design has a very limited scope and one needs to use it in a very efficient manner to get the most of it
+  - `using` keyword makes it more convenient for the developer to write code as it saves typing the prefix `xyz::`. That being said, in bigger systems, it may lead to name clashes and may lead to ambiguity, especially if multiple namespaces are being used using the `using` keyword.
+  - `namespace x = y` is aliasing `y` to `x`. This is so that long or nested namespaces conveniently gets converted to a smaller namespace. Although, this may lead to a new developer who is inexperienced with the codebase to get confused very easily.
 
 ## Abstracting Code into Classes
 
