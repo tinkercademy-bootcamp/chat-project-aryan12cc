@@ -64,9 +64,21 @@
 ## "Senses" in Programming
 
 - Have you ever heard of programmers referring to "code smells"? How can code smell?
+  - No. On searching it up, code smells are basically observable violations of code design or development fundamentals set in the codebase. Essentially, it defines the bad coding practices that one should avoid.
+  - These violations may lead to increased maintainance / refactoring / feature addition as quality of the code becomes poorer
 - What does it mean to have a sense of taste in programming? How can code taste?
+  - In general, a sense of taste means the way a developer would want programming to happen, based on his beliefs and preferences. For example, some developers like camelCase, while some like snake_case, or others may like PascalCase.
 - Is there an analogue for every sense?
+  - I do not think there is a formal definition. Although, I believe that one can come up with definitions for every sense.
 - What other code senses can you think of?
+  - Code Touches --> How is the code modified? Are the commits big or small, and what do the commits actually represent? 
+  - Code Sights --> On a first impression, how does the codebase look like? Does it contain a lot of documentation, or only jargons of code?
+  - Code Hears --> The printing and error logging done in the codebase. It may also mean the outputs given while testing the codebase.
 - How many senses do humans have?
+  - Five. Touch, Sense, Taste, Hear, Sight.
 - When would you want to see something before you touch it?
+  - If I am unaware of the object I am going to touch, I would like to see it first. Maybe its ice cold or maybe its burning.
+  - The same goes with the code, before modifying it, I would like to understand it.
 - When would you want to touch something before you see it?
+  - If I have an idea that the surroundings aren't dangerous, although not the ideal case, I can touch before seeing.
+  - In code as well, it's not an ideal case to modify the code before understanding it.
