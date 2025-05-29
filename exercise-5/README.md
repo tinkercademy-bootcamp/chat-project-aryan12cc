@@ -53,7 +53,13 @@
 ## Programming Sense of Taste
 
 - How do you judge what makes a particular choice of namespace and directory structure? 
+  - A developer with minimal understanding of the codebase should understand what each directory should contain just based on the name of the directory. Furthermore, the developer should also get an idea of what each directory will contain as files or sub-directories.
+  - A single file should cover a part of the logic and should be named appropriately. Each file should be highly cohesive and there should be low coupling between the files.
+  - The directory structure should be scalable if required
 - How do you judge what makes a good naming convention or programming style?
+  - Consistency -- what the codebase has adapted (which convention), and how consistent it is.
+  - Unamibguity -- Variables and files having meaningful names.
+  - Clarity -- Huge variable / file names make it hard for the developer to understand what is going on, as it takes much more cognitive load to just understand that such a variable exists.
 
 ## "Senses" in Programming
 
