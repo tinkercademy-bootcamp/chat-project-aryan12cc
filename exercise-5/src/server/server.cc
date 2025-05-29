@@ -3,51 +3,51 @@
 #include "server.h"
 
 Server::Server(int port) {
-  Server::server_port = port;
+  server_port = port;
 }
 
 Server::~Server() {
-  close(Server::server_socket);
+  close(server_socket);
 }
 
 // public member functions
 void Server::create_server() {
-  Server::create_server_socket();
-  Server::create_server_address();
+  create_server_socket();
+  create_server_address();
 }
 
 void Server::connect_to_socket() {
-  Server::bind_address_to_socket();
-  Server::listen_on_socket();
+  bind_address_to_socket();
+  listen_on_socket();
 
-  std::cout << "Server is listening on port: " << Server::server_port << std::endl;
-  Server::handle_connections();
+  std::cout << "Server is listening on port: " << server_port << std::endl;
+  handle_connections();
 }
 
 // private member functions
 void Server::set_socket_options(int options) {
-  auto err_code = setsockopt(Server::server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+  auto err_code = setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
                              &options, sizeof(options));
   tt::chat::check_error(err_code < 0, "setsockopt() error\n");
 }
 
 void Server::create_server_socket() {
-  Server::server_socket = tt::chat::net::create_socket();
+  server_socket = tt::chat::net::create_socket();
   set_socket_options(1);
 }
 
 void Server::create_server_address() {
-  Server::server_address = tt::chat::net::create_address(Server::server_port);
-  Server::server_address.sin_addr.s_addr = INADDR_ANY;
+  server_address = tt::chat::net::create_address(server_port);
+  server_address.sin_addr.s_addr = INADDR_ANY;
 }
 
 void Server::bind_address_to_socket() {
-  auto err_code = bind(Server::server_socket, (sockaddr *)&server_address, sizeof(Server::server_address));
+  auto err_code = bind(server_socket, (sockaddr *)&server_address, sizeof(server_address));
   tt::chat::check_error(err_code < 0, "bind failed\n");
 }
 
 void Server::listen_on_socket() {
-  auto err_code = listen(Server::server_socket, 3);
+  auto err_code = listen(server_socket, 3);
   tt::chat::check_error(err_code < 0, "listen failed\n");
 }
 
@@ -71,11 +71,11 @@ void Server::handle_accept(int accepted_socket) {
 }
 
 void Server::handle_connections() {
-  socklen_t address_size = sizeof(Server::server_address);
+  socklen_t address_size = sizeof(server_address);
 
   while (true) {
-    int accepted_socket = accept(Server::server_socket, (sockaddr *)&server_address, &address_size);
+    int accepted_socket = accept(server_socket, (sockaddr *)&server_address, &address_size);
     tt::chat::check_error(accepted_socket < 0, "Accept error n ");
-    Server::handle_accept(accepted_socket);
+    handle_accept(accepted_socket);
   }
 }

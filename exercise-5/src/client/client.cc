@@ -4,22 +4,22 @@
 
 // constructor
 Client::Client() {
-  Client::client_socket = tt::chat::net::create_socket();
+  client_socket = tt::chat::net::create_socket();
 }
 
 // destructor
 Client::~Client() {
-  close(Client::client_socket);
+  close(client_socket);
 }
 
 // public member functions
 void Client::connect_server(const std::string &server_ip, int port) {
-  Client::server_address = Client::create_server_address(server_ip, port);
-  Client::connect_to_server(Client::client_socket, Client::server_address);
+  server_address = create_server_address(server_ip, port);
+  connect_to_server(client_socket, server_address);
 }
 
 void Client::send_message(const std::string &message) {
-  Client::send_and_receive_message(Client::client_socket, message);
+  send_and_receive_message(client_socket, message);
 }
 
 // private member functions
