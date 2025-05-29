@@ -8,11 +8,7 @@
 - A new function `check_error()` has been created and `create_socket()` from 
   exercise-2 has been refactored to make use of it
 - What are the benefits of writing code in this way?
-  - Re-used lines of error checking is removed. Furthermore, every error that needs to be checked goes through the same singular process, and hence is uniform.
 - Are there any costs to writing code like this?
-  - There will be increased function calls, which may result in a larger overhead.
-  - Debugging will be slightly harder when it goes to the `check_error()` function, as it makes it a bit more convoluted.
-  - If a different flow of events need to be followed after the error, the author will need to write a separate error code.
 - Apply `check_error` to all the code in `src/`
 
 ## Introduction to Compiler Explorer
@@ -21,24 +17,13 @@
   `create_socket()` in [Compiler Explorer](https://godbolt.org) - Interactive 
   tool for exploring how C++ code compiles to assembly
 - What is happening here?
-  - The tool is linking C++ lines to their corresponding Assembly lines
-  - On first sight, the assembly code when `check_error` is introduced goes from 24 lines to 89 lines
-  - I see that there are more functions of the type `.LC*` and `.L*`. According to [Stack Overflow](https://stackoverflow.com/questions/78594236/what-does-lc-and-l-mean-and-what-is-its-purpose-in-assembly), `.LC*` is used for constants and `.L*` is used internally to handle branch prediction, cleanup etc.
-  - In the old `create_socket()` code, the majority of the assembly computation is happening in `my_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0`, where the code sets the parameters (registers have a specific order when a function is called), for example `%rax` will only store the answer, `%rdi` and `%rsi` for 1st and 2nd arguments, etc. Here, it is `eax`, `edi`, `esi` because of 32-bit vs 64-bit register architecture.
-  - In the new version `check_error(my_sock < 0, "Socket creation error");` takes up majority of the assembly code. A lot of `mov` commands before `check_error` and inside `check_error` means that the compiler is accessing a lot of register values from the memory, which basically is the "overhead" talked about earlier.
-  - On further digging, in the new code, `basic_string` class is being called multiple times. Thus, in the new code, the compiler actually has to create a new object of `std::string` and subsequently clean it up after the code finishes.
 - Can you think of any different approaches to this problem?
-  - Not really. Instead of passing by value, one may pass by reference so that the string is not copied, but directly moved. The string is not being initialized again, so it doesn't affect the rest of the code.
-  - Instead of `std::string`, one may also use `char*` since then, a constructor and destructor will not be called.
 - How can you modify your Makefile to generate assembly code instead of
   compiled code?
-  - We can add the `-S` flag while compiling to stop at the assemble phase and give us a `.s` (assembly) code for the program. Here, we also need to ensure to remove the `-o` directive of naming the executable.
 - **Note**: You can save the generated assembly from Compiler Explorer
 - **Bonus**: Can you view assembly code using your IDE?
-  - On opening the `.s` file, we can view the assembly code.
 - **Bonus**: How do you see the assembly when you step through each line in
   debugging mode from your IDE?
-  - `layout regs` in gdb gives the register values and you can see it change as and when you move through each line.
 - [x86 assembly reference](http://ref.x86asm.net/) - Comprehensive reference 
   for x86 assembly language instructions and syntax
 
@@ -47,34 +32,23 @@
 - Make sure you have `-fsanitize=address` in both your `CXX_FLAGS` and 
   `LD_FLAGS` in your Makefile
 - What do `-fsanitize=address`, `CXX_FLAGS` and `LD_FLAGS` mean?
-  - `-fsanitize=address` is a flag for fast memory error detector. It can detect the following memory errors:
-    - Out of bounds
-    - Use after free
-    - Double free etc.
-  - `CXX_FLAGS` is a variable to store all the flags to be used while compiling in C++
-  - `LD_FLAGS` is a variable to store all the flags to be used while linking different object files.
-- With the new tool of the Compiler Explorer, and keeping in mind what you have learned about how to use debug mode
+- With the new tool of the Compiler Explorer, and keeping in mind what you 
+  have learned about how to use debug mode
 - What happens when you look at a `std::string` using the above methods?
-  - The text of `std::string` might not be stored with the `basic_string` object itself. `std::string` is an object of `basic_string`, and has certain member functions like `_M_string_length`, `_M_p` etc. For large text, the string holds a pointer to the text, which is stored at another location (on the heap).
 - Where is the text in your `std::string`?
-  - For short strings, it is stored with the `std::string` object for faster access. For longer strings,it is stored on the heap and `std::string` just has a pointer to the location where the data is stored.
 - What is `std::optional`?
-  - `std::optional` allows an object of a particular data type to be present or not to be present. So the "variable" may be NULL, or may actually be assigned to a particular value. Unlike pointers, it actually "owns" the variable and doesn't point to the memory location containing the variable.
 - How do you find out the memory layout of a `std::optional`?
-  - I used the GDB CLI to get the memory address of the `std::optional` variable and how it is stored. Basically `std::optional` has the variable and a flag. The flag is set to 1 when the value contained is valid. Else, the flag is set to 0.
-- Read https://en.cppreference.com/w/cpp/memory#Smart_pointers - Guide to modern C++ memory management using smart pointers
+- Read https://en.cppreference.com/w/cpp/memory#Smart_pointers - Guide to 
+  modern C++ memory management using smart pointers
 - Which pointer types are the most important to know about?
-  - `std::unique_ptr`
-  - `std::shared_ptr`: Multiple pointers can "own" a particular object. The object is destroyed when the last pointer pointing to the object gets destroyed.
 - Which smart pointer should you use by default if you can?
-  - `std::unique_ptr`. This ensures that every object is pointed / "owned" by a single pointer only. It helps define clear semantics as to which pointer owns a particular object.
-- Does changing your optimization level in `CXXFLAGS` from `-O0` to `-O3` have any impact on the answers to any of the above questions?
-  - The memory layout may vary majorly as there maybe some changes / reordering done in the memory in order to aggressively optimize the code.
+- Does changing your optimization level in `CXXFLAGS` from `-O0` to `-O3` have
+  any impact on the answers to any of the above questions?
 
 ## More Thinking About Performance
 
-- After your experiments with Compiler Explorer, do you have any updates for your answers in exercise-2?
-  - In highly optimized codes, it may actually be better to not make the code very modular because of the overhead incurred. In general, I think there should be a good balance between maintaining the code and modularizing the code, so that new developers can easily understand, whilst also ensuring that the code is highly modular.
+- After your experiments with Compiler Explorer, do you have any updates for
+  your answers in exercise-2?
 
 ### Bonus: Do Not Watch Now 
 
