@@ -49,7 +49,7 @@ void listen_on_socket(int sock) {
   }
 }
 
-void configure_socket(int my_socket, sockaddr_in &address) {
+void start_listening_on_socket(int my_socket, sockaddr_in &address) {
   const int kSocketOptions = 1;
   set_socket_options(my_socket, kSocketOptions);
 
@@ -57,7 +57,7 @@ void configure_socket(int my_socket, sockaddr_in &address) {
   listen_on_socket(my_socket);
 }
 
-void handle_accepted_connection(int client_socket) {
+void handle_accept(int client_socket) {
   char buffer[kBufferSize] = {0};
   ssize_t valread = read(client_socket, buffer, kBufferSize);
 
@@ -78,7 +78,6 @@ void handle_connections(int sock, int port) {
   socklen_t address_size = sizeof(address);
 
   // #Question - is it good to have an infinite loop?
-  // Answer: Here it is fine, since the server, in general, should always stay up and listen to clients requests
   while (true) {
     int accepted_socket = accept(sock, (sockaddr *)&address, &address_size);
     if (accepted_socket < 0) {
@@ -86,7 +85,7 @@ void handle_connections(int sock, int port) {
       // we continue to accept new connections if possible
       continue;
     }
-    handle_accepted_connection(accepted_socket);
+    handle_accept(accepted_socket);
   }
 }
 
@@ -96,10 +95,7 @@ int main() {
   sockaddr_in address = create_address(kPort);
 
   // #Question - is there a better name for this function?
-  // The function configures the socket options as well as listens to it. 
-  // Ideally they should be two separate functions
-  // init_and_listen_on_socket() can be a better name
-  configure_socket(my_socket, address);
+  start_listening_on_socket(my_socket, address);
   std::cout << "Server listening on port " << kPort << "\n";
   handle_connections(my_socket, kPort);
   close(my_socket);

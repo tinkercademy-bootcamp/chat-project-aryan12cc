@@ -40,52 +40,27 @@ void connect_to_server(int sock, sockaddr_in &server_address) {
   }
 }
 
-void send_message(int sock, const std::string &message) {
+void send_and_receive_message(int sock, const std::string &message) {
+  const int kBufferSize = 1024;
+  // #Question - is buffer the best name we can use?
+  char buffer[kBufferSize] = {0};
+
+  // Send the message to the server
   send(sock, message.c_str(), message.size(), 0);
   std::cout << "Sent: " << message << "\n";
-}
 
-void receive_message(int sock) {
-  const int kBufferSize = 1024;
-  char receive_buffer[kBufferSize] = {0};
-
-  ssize_t receive_size = read(sock, receive_buffer, kBufferSize);
-
-  if(receive_size > 0) {
-    std::cout << "Received: " << receive_buffer << "\n";
-  }
-  else if(receive_size == 0) {
-    std::cout << "Server closed connection\n";
-  }
-  else {
-    std::cerr << "Error receiving data (read function)\n";
+  // Receive response from the server
+  ssize_t read_size = read(sock, buffer, kBufferSize);
+  if (read_size > 0) {
+    std::cout << "Received: " << buffer << "\n";
+  } else if (read_size == 0) {
+    std::cout << "Server closed connection.\n";
+  } else {
+    std::cerr << "Read error\n";
   }
 }
-
-// void send_and_receive_message(int sock, const std::string &message) {
-//   const int kBufferSize = 1024;
-//   // #Question - is buffer the best name we can use?
-//   // receive_message_buffer would be better
-//   char buffer[kBufferSize] = {0};
-
-//   // Send the message to the server
-//   send(sock, message.c_str(), message.size(), 0);
-//   std::cout << "Sent: " << message << "\n";
-
-//   // Receive response from the server
-//   ssize_t read_size = read(sock, buffer, kBufferSize);
-//   if (read_size > 0) {
-//     std::cout << "Received: " << buffer << "\n";
-//   } else if (read_size == 0) {
-//     std::cout << "Server closed connection.\n";
-//   } else {
-//     std::cerr << "Read error\n";
-//   }
-// }
 
 // #Question - what can be improved in this function?
-// In the original version, I think <message> should be in double quotes.
-// Instead of <message>, one may also write <non-empty message>
 std::string read_args(int argc, char *argv[]) {
   std::string message = "Hello from client";
   if (argc == 1) {
@@ -93,18 +68,7 @@ std::string read_args(int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
   if (argc > 1) {
-    message = "";
-    for(int i = 1; i < argc; i++) {
-      message += argv[i];
-      if(i != argc - 1) {
-        message += " ";
-      }
-    }
-  }
-
-  if(message.size() == 0) {
-    std::cout << "Please send a non-empty message\n";
-    exit(EXIT_FAILURE);
+    message = argv[1];
   }
   return message;
 }
@@ -119,9 +83,7 @@ int main(int argc, char *argv[]) {
   sockaddr_in server_address = create_address(kServerAddress, kPort);
 
   connect_to_server(my_socket, server_address);
-  send_message(my_socket, message);
-  receive_message(my_socket);
-  // send_and_receive_message(my_socket, message);
+  send_and_receive_message(my_socket, message);
   close(my_socket);
 
   return 0;
