@@ -75,7 +75,14 @@
   - Code Sights --> On a first impression, how does the codebase look like? Does it contain a lot of documentation, or only jargons of code?
   - Code Hears --> The printing and error logging done in the codebase. It may also mean the outputs given while testing the codebase.
 - How many senses do humans have?
-  - Five. Touch, Sense, Taste, Hear, Sight.
+  - [Source](https://www.sensorytrust.org.uk/blog/how-many-senses-do-we-have). I am not convinced of the source, but here is an attempt to work on the feedback given.
+  - There are multiple senses. In our childhood, we were taught of 5. These were touch, sense, taste, hear, sight.
+  - Neurologists although, differ, and say that there are atleast 9. Some say 21, while some even go on to say 53. The sense that are not taught in our childhood but are thought of as senses by neurologists are as follows:
+    - The sense of heat (thermoception) --> How hot or cold do we feel?
+    - The perception of pain (nociception) --> When we slam against a wall, how do we know we are injured?
+    - Sense of balance (equilibrioception) --> How do we know how to walk?
+    - Sense of body awareness (proprioception) --> Touching your ears with your eyes closed. How do you do that the first time itself?
+  - There are many other senses that the neurologists think that exist, but the number may differ based on how the group of senses are broken down individually.
 - When would you want to see something before you touch it?
   - If I am unaware of the object I am going to touch, I would like to see it first. Maybe its ice cold or maybe its burning.
   - The same goes with the code, before modifying it, I would like to understand it.
