@@ -71,7 +71,7 @@
 - Is there an analogue for every sense?
   - I do not think there is a formal definition. Although, I believe that one can come up with definitions for every sense.
 - What other code senses can you think of?
-  - Code Touches --> How is the code modified? Are the commits big or small, and what do the commits actually represent? 
+  - Code Touches --> Testing. Testing allows you to touch the codebase by checking whether everything is working as intended without actually going into the details of the implementation. You have an "outer" representation of the code, and hence you "touch" the code externally, without knowing anything internally.
   - Code Sights --> On a first impression, how does the codebase look like? Does it contain a lot of documentation, or only jargons of code?
   - Code Hears --> The printing and error logging done in the codebase. It may also mean the outputs given while testing the codebase.
 - How many senses do humans have?
