@@ -87,5 +87,5 @@
   - If I am unaware of the object I am going to touch, I would like to see it first. Maybe its ice cold or maybe its burning.
   - The same goes with the code, before modifying it, I would like to understand it.
 - When would you want to touch something before you see it?
-  - If I have an idea that the surroundings aren't dangerous, although not the ideal case, I can touch before seeing.
-  - In code as well, it's not an ideal case to modify the code before understanding it.
+  - If I have an idea that the surroundings aren't dangerous, and don't have a clear view of something, I would want to touch it to get an idea of what it is.
+  - In code, sometimes, just running the tests may explain what a part of the code intends to do, thus, giving the developer better clarity on what is happening.
