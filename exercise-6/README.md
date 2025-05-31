@@ -16,6 +16,10 @@
   - The current makefile doesn't need any changes to use the library since it recursively finds all directories and adds the `-I` flag before the directory.
   - In case the makefile didn't have the command, we can have a variable containing all the paths to third-party directories, and add `-I` flag before the paths.
 - How many different ways can this library be added into your project?
+  - Install directly on the machine (ssh server in this case). Haven't tried, but as per the README of the Github repository: `sudo apt install libspdlog-dev`
+  - Install the header-only version (copying the `include` folder) to the repository (`./exercise-6` in this case). Then add `-I` flag while manually compiling or compile using Make.
+  - Install the compiled version by cloning the repository and using `cmake` on it. Then we can link the library via Make or g++ CLI.
+  - **Note:** These only contain the ways mentioned in the above Github repository. May not be all the ways to add the library to the project.
 - What are the tradeoffs in the different ways?
 - Why are there so many different ways to do it?
   
