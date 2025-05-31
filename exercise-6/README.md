@@ -9,6 +9,9 @@
   [More info here](https://github.com/gabime/spdlog) - Fast C++ logging 
   library with various sink types and formatting options
 - How do you compile this file using the `g++` CLI?
+  - Installed only the header files from the link given above and added them to the `src/` folder.
+  - Tried running a dummy code `try.cc`, and had to compile with the following line: `g++ src/try.cc -I src` when in `exercise-6/` folder.
+  - In general, we need to add `-I <path to header>` in our compilation command.
 - What do you need to change in your makefile to use this library?
 - How many different ways can this library be added into your project?
 - What are the tradeoffs in the different ways?
