@@ -21,6 +21,9 @@
   - Install the compiled version by cloning the repository and using `cmake` on it. Then we can link the library via Make or g++ CLI.
   - **Note:** These only contain the ways mentioned in the above Github repository. May not be all the ways to add the library to the project.
 - What are the tradeoffs in the different ways?
+  - Installing directly on the machine is the easiest to setup but it is upto the developers of the third party libraries to ensure that the libraries are upto date with the package managers. Thus, the versions may be outdated which may lead to errors bsaed on some functionality being missing. Furthermore, it will be computer specific, depening on the package manager of the computer. For example, if there is a computer with `brew`, while another with `apt`, and the developer of the third-party library has different versions for `brew` and `apt`, then it will be an issue.
+  - Header only version ensures that the setup still remains easy while also portable. Although, there will be a huge increase in the compile time as it is recompiled each time.
+  - Installing compiled versions will give a huge boost to the compilation time but it is very delicate, in the sense that the Make files need to be correct and if they aren't then it may be a hassle to compile the project. That being said, bigger projects already have this figured usually, so this should be recommended for bigger projects.
 - Why are there so many different ways to do it?
   
 ## Static Linking vs Dynamic Linking
