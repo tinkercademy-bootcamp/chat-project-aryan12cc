@@ -13,6 +13,8 @@
   - Tried running a dummy code `try.cc`, and had to compile with the following line: `g++ src/try.cc -I src` when in `exercise-6/` folder.
   - In general, we need to add `-I <path to header>` in our compilation command.
 - What do you need to change in your makefile to use this library?
+  - The current makefile doesn't need any changes to use the library since it recursively finds all directories and adds the `-I` flag before the directory.
+  - In case the makefile didn't have the command, we can have a variable containing all the paths to third-party directories, and add `-I` flag before the paths.
 - How many different ways can this library be added into your project?
 - What are the tradeoffs in the different ways?
 - Why are there so many different ways to do it?
