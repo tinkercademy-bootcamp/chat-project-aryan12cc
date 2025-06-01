@@ -30,6 +30,8 @@
 ## Static Linking vs Dynamic Linking
 
 - What are the differences between static linking and dynamic linking?
+  - **Static Linking:** The libraries linked are embedded directly into the executable of the program at linking time.
+  - **Dynamic Linking:** The executable contains references to the shared code, but not the actual code. The shared libraries are linked at runtime instead of linking time.
 - What are the tradeoffs?
 - How do you enable static linking or dynamic linking in your makefile?
 
