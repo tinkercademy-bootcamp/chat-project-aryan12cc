@@ -25,6 +25,7 @@
   - Header only version ensures that the setup still remains easy while also portable. Although, there will be a huge increase in the compile time as it is recompiled each time.
   - Installing compiled versions will give a huge boost to the compilation time but it is very delicate, in the sense that the Make files need to be correct and if they aren't then it may be a hassle to compile the project. That being said, bigger projects already have this figured usually, so this should be recommended for bigger projects.
 - Why are there so many different ways to do it?
+  - C++ historically never has had a package manager. Furthermore, based on the tradeoffs, it depends on the developer to select which way is the best for compiling and running the application in the bigger world, and hence, there are many different ways to do it, each with their own set of pros and cons.
   
 ## Static Linking vs Dynamic Linking
 
