@@ -33,6 +33,8 @@
   - **Static Linking:** The libraries linked are embedded directly into the executable of the program at linking time.
   - **Dynamic Linking:** The executable contains references to the shared code, but not the actual code. The shared libraries are linked at runtime instead of linking time.
 - What are the tradeoffs?
+  - In static linking, only the executable needs to be run, without having access to the other library files. Static linking will have a larger executable because of the linking of libraries. Furthermore, if different executables use the same library, it's a waste of memory.
+  - Dynamic linking has a much smaller executable file compared to static linking because of the linked libraries. Furthermore, if a single library gets an update, the entire system doesn't need to be updated -- the library can get updated and it will have effects over the entire system. However, uses also need to install that they have the correct dependencies (library versions) to efficiently compile / run the code.
 - How do you enable static linking or dynamic linking in your makefile?
 
 ## Git Clone and Building from Source
