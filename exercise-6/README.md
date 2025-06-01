@@ -42,6 +42,16 @@
 ## Git Clone and Building from Source
 
 - Where is `g++` looking for the include files and library files?
+  - `#include <header.h>` searches in the system include paths
+  - `#include "header.h"` searches in the local directory first, and then the system include paths
+  - List of include files:
+    - `/usr/lib/gcc/aarch64-linux-gnu/14/include`
+    - `/usr/local/include`
+    - `/usr/include/aarch64-linux-gnu`
+    - `/usr/include`
+    - Directories specified with `-I` flag
+  - List of library files:
+    
 - How do you find out?
 
 ## C++ Package Managers
