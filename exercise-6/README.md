@@ -55,6 +55,8 @@
     - Directories specified with `-L` flag
 
 - How do you find out?
+  - Include paths: `g++ -v -x c -E /dev/null`
+  - Library paths: `g++ -print-search-dirs`
 
 ## C++ Package Managers
 
