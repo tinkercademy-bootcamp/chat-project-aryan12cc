@@ -61,5 +61,6 @@
 ## C++ Package Managers
 
 - Why are there so many C++ package managers?
+  - There are many C++ package managers because there is no "official" package manager. Furthermore, C++ is used for several different purposes (low latency, embedded systems etc.) and every project needs to be compiled for their own set of requirements of computer architecture.
 - Which one is the best one?
 - Which are the most notable ways to manage the compilation of C++ projects?
