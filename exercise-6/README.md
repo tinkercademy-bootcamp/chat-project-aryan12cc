@@ -65,3 +65,5 @@
 - Which one is the best one?
   - There are different package managers for different target projects, depending on the project requirements. No package manager is the "best one".  
 - Which are the most notable ways to manage the compilation of C++ projects?
+  - Make
+  - CMake
