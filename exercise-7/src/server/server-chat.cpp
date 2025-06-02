@@ -1,6 +1,7 @@
 // ./server/server-chat.cpp
 
 /* standard headers */
+#include <sys/epoll.h>
 #include <unistd.h>
 
 /* user-defined headers */
@@ -21,6 +22,8 @@ namespace chat::server {
 
     create_server_socket(port);
 
+    server_listen_for_connections();
+
     return;
   }
 
@@ -30,6 +33,7 @@ namespace chat::server {
   */
   Server::~Server() {
 
+    close(epoll_fd);
     close(listen_socket_fd);
     return;
   }
@@ -66,5 +70,14 @@ namespace chat::server {
 
     return;
   }
+
+  /*
+  Function to set the epoll file descriptor to listen to connections from
+  multiple sockets, and act upon them
+  */
+  void Server::server_listen_for_connections() {
+    epoll_fd = epoll_create1(0);
+  }
+
   // --------------- PRIVATE FUNCTIONS END HERE ---------------
 }

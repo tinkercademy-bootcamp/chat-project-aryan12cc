@@ -42,8 +42,17 @@ namespace chat::server {
         int port /* the port through which server will listen */
       );
 
+      /*
+      The function is used when the server is ready to accept connections
+      from clients. It runs in a loop, looking for any input / connections
+      */
+     void server_listen_for_connections();
+
       // member variables
-      
+
+      int epoll_fd; // file descriptor for epoll used to monitor multiple
+                    // sockets
+
       int listen_socket_fd; // file descriptor for the server's listening
                             // socket
   };
