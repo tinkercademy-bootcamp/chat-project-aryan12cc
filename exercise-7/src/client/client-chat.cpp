@@ -51,28 +51,62 @@ namespace chat::client {
   void Client::communication_loop() {
 
     char buffer[BUF_SIZE];
+    fd_set active_file_descriptors; // file descriptor set for
+                                // monitoring readable file descriptors
+
+    int max_file_descriptor = std::max(client_socket_fd, STDIN_FILENO);
+
+    // get input from the client
+    std::cout << "Give your input here:\n";
+
     while(true) {
+      // clear file descriptor set and only add the two file descriptors
+      FD_ZERO(&active_file_descriptors);
+      FD_SET(client_socket_fd, &active_file_descriptors);
+      FD_SET(STDIN_FILENO, &active_file_descriptors);
 
-      // get input from the client
-      std::cout << "Give your input here:\n";
-
-      std::string input = "";
-      std::getline(std::cin, input);
+      // wait for activity on any of the file descriptors
+      int activity_result = select(max_file_descriptor + 1, 
+                            &active_file_descriptors, NULL, NULL, NULL);
       
-      // write the input to the server
-      check_error(write(client_socket_fd, input.c_str(), input.size() + 1) 
-                  <= 0, "Failed to write from client to server");
+      check_error(activity_result < 0, "Error in select() call");
       
-      // read from server -- temporary -- echo
-      int read_bytes = 0;
-      set_buffer_to_zero(buffer);
-      while((read_bytes = read(client_socket_fd, buffer, BUF_SIZE)) > 0) {
-        std::cout << "Echo: " << buffer << std::endl;
+      // check for activity from server
+      if(FD_ISSET(client_socket_fd, &active_file_descriptors)) {
         set_buffer_to_zero(buffer);
+        
+        // read message from server
+        int bytes_read = read(client_socket_fd, buffer, BUF_SIZE - 1);
+        
+        if(bytes_read > 0) {
+          buffer[bytes_read] = '\0';
+          std::cout << "From server: " << buffer << std::endl;
+
+          // print for the next input
+          std::cout << "Give your input here:\n";
+        }
+        else if(bytes_read == 0) {
+          // Server has closed the connection
+          std::cout << "Server disconnected" << std::endl;
+          break;
+        }
+        else {
+          // Error reading from server
+          std::cerr << "Error reading from server: " << strerror(errno) << std::endl;
+          break;
+        }
       }
-      // check for errors
-      check_error(read_bytes < 0, "Failed to read from the server");
-      // if nothing is read, the buffer is clear, so go back to taking input
+      
+      // check for activity from user
+      if(FD_ISSET(STDIN_FILENO, &active_file_descriptors)) {
+        // read input
+        std::string input;
+        std::getline(std::cin, input); // reading entire line
+
+        // write to server
+        check_error(write(client_socket_fd, input.c_str(), input.size() + 1) 
+                  <= 0, "Failed to write from client to server");
+      }
     }
   }
 
