@@ -1,6 +1,7 @@
 // ./src/network/network.cpp
 
 /* standard headers */
+#include <sys/epoll.h>
 
 /* user-defined headers */
 #include "network.h"
@@ -35,4 +36,21 @@ namespace chat::net {
     return address;
   }
   
+  /*
+  Function to add a file descriptor to an epoll instance for monitoring for 
+  specific events
+  */
+  void epoll_ctl_add(int epoll_file_descriptor, int monitor_file_descriptor, 
+                    int events) {
+
+    // populate the epoll_event struct with the data provided
+    struct epoll_event event;
+    event.events = events;
+    event.data.fd = monitor_file_descriptor;
+
+    check_error(epoll_ctl(epoll_file_descriptor, EPOLL_CTL_ADD, 
+                        monitor_file_descriptor, &event) == -1,
+                        "Epoll ctl() failed");
+    
+  }
 }

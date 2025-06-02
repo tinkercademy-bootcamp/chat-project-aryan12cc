@@ -20,6 +20,15 @@ namespace chat::net {
   sockaddr_in create_address(
     int port /* port with which the address is binded */
   );
+
+  /*
+  Function to register a file descriptor with an epoll instance to monitor
+  */
+  void epoll_ctl_add(
+    int epoll_file_descriptor, /* File descriptor of the epoll instance */
+    int monitor_file_descriptor, /* File descriptor to be monitored */
+    int events /* Events for which the file descriptor is monitored */
+  );
 }
 
 #endif

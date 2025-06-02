@@ -77,6 +77,12 @@ namespace chat::server {
   */
   void Server::server_listen_for_connections() {
     epoll_fd = epoll_create1(0);
+
+    // make the epoll instance monitor the file descriptor listening
+    // for incoming connections for any input
+    net::epoll_ctl_add(epoll_fd, listen_socket_fd, EPOLLIN);
+
+    return;
   }
 
   // --------------- PRIVATE FUNCTIONS END HERE ---------------
