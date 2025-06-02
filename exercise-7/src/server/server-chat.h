@@ -1,3 +1,5 @@
+// ./server/server-chat.h
+
 #ifndef __SERVER_CHAT_H__
 #define __SERVER_CHAT_H__
 
@@ -17,13 +19,32 @@ namespace chat::server {
     
     // public functions and variables, accessible by everyone
     public:
-      Server(); // constructor to initialize member variables
-      ~Server(); // destructor to ensure cleanup of sockets
+
+      /* Constructor to initialize member variables */
+      Server(
+        int port /* the port through which server will listen */
+      );
+
+      /* Destructor to ensure cleanup of sockets */
+      ~Server();
     
     // private functions and variables, only accessible by functions and 
     // variables of the same class
     private:
-      int server_socket_fd; // file descriptor for the server's listening
+
+      // member functions
+
+      /*
+      The function creates a server socket tied to the port as given
+      in the parameter
+      */
+      void create_server_socket(
+        int port /* the port through which server will listen */
+      );
+
+      // member variables
+      
+      int listen_socket_fd; // file descriptor for the server's listening
                             // socket
   };
   
