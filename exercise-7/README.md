@@ -1,5 +1,10 @@
 # Exercise 7
 
+## Current Status of The Project
+
+The server is an echo server to which multiple clients can connect and each 
+may send multiple messages.
+
 **Update this README with your answers to the questions below.**
 
 ## Resources for Learning About EPOLL
