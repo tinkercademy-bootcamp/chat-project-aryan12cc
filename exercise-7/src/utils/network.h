@@ -1,0 +1,29 @@
+// ./src/utils/network.h
+
+#ifndef __NETWORK_H__
+#define __NETWORK_H__
+
+/* 
+For using:
+1. sockaddr_in struct
+*/
+#include <netinet/in.h> 
+
+namespace chat::net {
+
+  /* 
+  Function to create socket
+  Returns: Socket file descriptor
+  */
+  int create_socket();
+
+  /*
+  Function to create the address
+  Returns: the address struct containing the details of the address
+  */
+  sockaddr_in create_address(
+    int port /* port with which the address is binded */
+  );
+}
+
+#endif

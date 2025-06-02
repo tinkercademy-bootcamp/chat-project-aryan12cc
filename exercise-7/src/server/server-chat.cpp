@@ -1,5 +1,11 @@
 // ./server/server-chat.cpp
 
+/* standard headers */
+#include <unistd.h>
+
+/* user-defined headers */
+#include "../utils.h"
+#include "../utils/network.h"
 #include "server-chat.h"
 
 namespace chat::server {
@@ -13,7 +19,6 @@ namespace chat::server {
     int port /* the port through which server will listen */
   ) {
 
-    // not implemented
     create_server_socket(port);
 
     return;
@@ -25,7 +30,7 @@ namespace chat::server {
   */
   Server::~Server() {
 
-    // not implemented
+    close(listen_socket_fd);
     return;
   }
 
@@ -39,7 +44,7 @@ namespace chat::server {
   void Server::create_server_socket(
     int port /* the port through which server will listen */
   ) {
-    // not implemented
+    listen_socket_fd = net::create_socket();
     return;
   }
   // --------------- PRIVATE FUNCTIONS END HERE ---------------
