@@ -2,6 +2,7 @@
 
 /* standard headers */
 #include <arpa/inet.h>
+#include <fcntl.h>
 #include <string>
 #include <sys/epoll.h>
 #include <unistd.h>
@@ -73,9 +74,16 @@ namespace chat::server {
           set_buffer_to_zero(buffer);
           inet_ntop(AF_INET, (char*) &store_client_address.sin_addr, buffer,
                     sizeof(store_client_address));
+
           std::cout << "Connected with client at address " << buffer << ":" 
             << ntohs(store_client_address.sin_port) << std::endl;
           
+          check_error(fcntl(connection_socket, F_SETFL, 
+            fcntl(connection_socket, F_GETFL, 0) | O_NONBLOCK) == -1,
+            "Non-blocking socket failed");
+          
+          // add the file descriptor to the list of epoll file descriptor 
+          // list for monitoring
           net::epoll_ctl_add(epoll_fd, connection_socket, EPOLLIN); 
               // src/network/network.h
         }
@@ -123,6 +131,10 @@ namespace chat::server {
     check_error(bind(listen_socket_fd, (sockaddr *) &server_address, 
                 sizeof(server_address)) < 0, "Bind failed");
       // utils.h
+    
+    check_error(fcntl(listen_socket_fd, F_SETFL, 
+      fcntl(listen_socket_fd, F_GETFL, 0) | O_NONBLOCK) == -1,
+      "Non-blocking socket failed"); // utils.h
 
     check_error(listen(listen_socket_fd, 10) < 0, "Listen failed");
       // utils.h
