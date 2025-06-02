@@ -24,12 +24,12 @@ SRC_DIR := src
 # Find all the C and C++ files we want to compile
 # Note the single quotes around the * expressions. The shell will incorrectly expand these otherwise, but we want to send the * directly to the find command.
 
-SRCS := $(shell find $(SRC_DIR) -type f -name '*.cc')
+SRCS := $(shell find $(SRC_DIR) -type f -name '*.cpp')
 
 # Prepends BUILD_DIR and appends .o to every src file
 # As an example, ./your_dir/hello.cpp turns into ./build/./your_dir/hello.cpp.o
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
-NON_MAIN_OBJS := $(filter-out %main.cc.o, $(OBJS))
+NON_MAIN_OBJS := $(filter-out %main.cpp.o, $(OBJS))
 
 # String substitution (suffix version without %).
 # As an example, ./build/hello.cpp.o turns into ./build/hello.cpp.d
@@ -47,13 +47,13 @@ CPPFLAGS := $(INC_FLAGS) -MMD -MP
 
 all: $(BUILD_DIR)/server $(BUILD_DIR)/client
 	
-$(BUILD_DIR)/server: $(BUILD_DIR)/src/server-main.cc.o $(NON_MAIN_OBJS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(BUILD_DIR)/src/server-main.cc.o $(NON_MAIN_OBJS) -o $(BUILD_DIR)/server $(LDFLAGS)
+$(BUILD_DIR)/server: $(BUILD_DIR)/src/server-main.cpp.o $(NON_MAIN_OBJS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(BUILD_DIR)/src/server-main.cpp.o $(NON_MAIN_OBJS) -o $(BUILD_DIR)/server $(LDFLAGS)
 
-$(BUILD_DIR)/client: $(BUILD_DIR)/src/client-main.cc.o $(NON_MAIN_OBJS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(BUILD_DIR)/src/client-main.cc.o $(NON_MAIN_OBJS) -o $(BUILD_DIR)/client $(LDFLAGS)
+$(BUILD_DIR)/client: $(BUILD_DIR)/src/client-main.cpp.o $(NON_MAIN_OBJS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(BUILD_DIR)/src/client-main.cpp.o $(NON_MAIN_OBJS) -o $(BUILD_DIR)/client $(LDFLAGS)
 
-$(BUILD_DIR)/%.cc.o: %.cc
+$(BUILD_DIR)/%.cpp.o: %.cpp
 	mkdir -p $(dir $@)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
