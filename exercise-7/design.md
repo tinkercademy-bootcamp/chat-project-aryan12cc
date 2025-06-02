@@ -68,3 +68,28 @@
   - *`/login <phone_number> <username>`
   - *`/register <phone_number> <username>`
   - *`/request-add <channel_id>` Request another client to be added to the `channel_id`. Needs to be an `admin` of `channel_id` channel.
+
+## Directory Structure
+
+**This is just a proposed directory structure.**
+
+```
+|-build/
+|-src/
+|    |-utils/
+|    |   |-- network.h
+|    |   |-- network.cpp
+|    |-server/
+|    |   |--channels/
+|    |   |     |-- channel-information.h
+|    |   |     |-- channel-information.cpp
+|    |   |-- server-chat.h
+|    |   |-- server-chat.cpp
+|    |-client/
+|    |   |-- client-chat.h
+|    |   |-- client-chat.cpp
+|    |- client-main.cpp
+|    |- server-main.cpp
+|-tests/
+Makefile
+```
