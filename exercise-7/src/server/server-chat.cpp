@@ -2,6 +2,7 @@
 
 /* standard headers */
 #include <arpa/inet.h>
+#include <string>
 #include <sys/epoll.h>
 #include <unistd.h>
 
@@ -47,7 +48,6 @@ namespace chat::server {
 
   void Server::communication_loop() {
     constexpr int MAX_EVENTS = 10;
-    constexpr int BUF_SIZE = 1024;
     struct epoll_event events[MAX_EVENTS];
     struct sockaddr_in store_client_address; // store client address
                                           // when accept() is called
@@ -65,16 +65,36 @@ namespace chat::server {
 
         // incoming connection
         if(events[event_idx].data.fd == listen_socket_fd) {
-          std::cerr << "New incoming connection!" << std::endl;
           // accept the incoming connection
           int connection_socket = accept(listen_socket_fd, 
                                 (struct sockaddr*) &store_client_address,
                                 &socket_length);
           // convert client ip to a string
+          set_buffer_to_zero(buffer);
           inet_ntop(AF_INET, (char*) &store_client_address.sin_addr, buffer,
                     sizeof(store_client_address));
           std::cout << "Connected with client at address " << buffer << ":" 
             << ntohs(store_client_address.sin_port) << std::endl;
+          
+          net::epoll_ctl_add(epoll_fd, connection_socket, EPOLLIN); 
+              // src/network/network.h
+        }
+        // someone sent an input
+        else if(events[event_idx].events && EPOLLIN) {
+          while(true) {
+            set_buffer_to_zero(buffer);
+            int bytes_read = read(events[event_idx].data.fd, buffer, 
+                                  sizeof(buffer));
+
+            // all data read
+            if(bytes_read <= 0) {
+              break;
+            }
+            else {
+              std::cout << "Received: " << buffer << std::endl;
+              write(events[event_idx].data.fd, buffer, strlen(buffer));
+            }
+          }
         }
       }
     }

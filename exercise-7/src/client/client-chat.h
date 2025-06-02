@@ -43,6 +43,9 @@ namespace chat::client {
         int port /* the port to which the client needs to connect */
       );
 
+      /* Function to communicate with the server */
+      void communication_loop();
+
       /* Function to connect the client to the server */
       void connect_to_server();
 
