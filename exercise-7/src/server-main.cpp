@@ -9,5 +9,6 @@
 const int PORT = 8080;
 
 int main() {
-  chat::server::Server chat_server(PORT); // calling the server to listen through port = PORT
+  // calling the server to listen through port = PORT
+  chat::server::Server chat_server(PORT); // src/server/server-chat.h
 }

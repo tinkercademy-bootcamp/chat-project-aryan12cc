@@ -44,8 +44,11 @@ namespace chat::server {
   void Server::create_server_socket(
     int port /* the port through which server will listen */
   ) {
-    listen_socket_fd = net::create_socket();
-    sockaddr_in server_address = net::create_address(port);
+    listen_socket_fd = net::create_socket(); 
+      // src/network/network.h 
+    
+    sockaddr_in server_address = net::create_address(port); 
+      // src/network/network.h
 
     /*
     Configuring a listening server socket to allow incoming connections
@@ -56,7 +59,7 @@ namespace chat::server {
     check_error(bind(listen_socket_fd, (sockaddr *) &server_address, 
                 sizeof(server_address)) < 0, "Bind failed");
     check_error(listen(listen_socket_fd, 10) < 0, "Listen failed");
-    
+
     return;
   }
   // --------------- PRIVATE FUNCTIONS END HERE ---------------

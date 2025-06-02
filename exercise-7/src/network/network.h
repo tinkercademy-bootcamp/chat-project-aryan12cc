@@ -3,10 +3,6 @@
 #ifndef __NETWORK_H__
 #define __NETWORK_H__
 
-/* 
-For using:
-1. sockaddr_in struct
-*/
 #include <netinet/in.h> 
 
 namespace chat::net {
