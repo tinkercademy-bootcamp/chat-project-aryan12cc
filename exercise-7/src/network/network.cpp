@@ -17,4 +17,22 @@ namespace chat::net {
     check_error(sock_fd < 0, "Socket creation error\n");
     return sock_fd;
   }
+
+  /*
+  Creates an IPv4 struct binded to a port provided as an argument
+  Accepts connections from any IP address
+  Returns: IPv4 address struct
+  */
+  sockaddr_in create_address(int port) {
+    sockaddr_in address;
+
+    // allow connections from IPv4 family
+    address.sin_family = AF_INET;
+
+    // 
+    address.sin_port = htons(port);
+    address.sin_addr.s_addr = INADDR_ANY;
+    return address;
+  }
+  
 }

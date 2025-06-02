@@ -45,6 +45,18 @@ namespace chat::server {
     int port /* the port through which server will listen */
   ) {
     listen_socket_fd = net::create_socket();
+    sockaddr_in server_address = net::create_address(port);
+
+    /*
+    Configuring a listening server socket to allow incoming connections
+    - SO_REUSEADDR to immediately bind the socket to a port
+    */
+    int opt = 1;
+    setsockopt(listen_socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    check_error(bind(listen_socket_fd, (sockaddr *) &server_address, 
+                sizeof(server_address)) < 0, "Bind failed");
+    check_error(listen(listen_socket_fd, 10) < 0, "Listen failed");
+    
     return;
   }
   // --------------- PRIVATE FUNCTIONS END HERE ---------------
