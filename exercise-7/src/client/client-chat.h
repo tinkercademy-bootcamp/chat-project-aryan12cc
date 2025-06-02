@@ -3,6 +3,11 @@
 #ifndef __CLIENT_CHAT_H__
 #define __CLIENT_CHAT_H__
 
+/* standard headers */
+
+/* user-defined headers */
+#include <netinet/in.h>
+
 /* namespace for all client related operations */
 namespace chat::client { 
 
@@ -19,7 +24,9 @@ namespace chat::client {
     public:
 
       /* Constructor to initialize member variables */
-      Client();
+      Client(
+        int port /* the port through which client will connect to server */
+      );
 
       /* Destructor to ensure cleanup of variables */
       ~Client();
@@ -29,9 +36,21 @@ namespace chat::client {
     private:
 
       // member functions
+      
+      /* Function to setup the socket of the client 
+      to be able to connect to the server */
+      void client_setup_socket(
+        int port /* the port to which the client needs to connect */
+      );
+
+      /* Function to connect the client to the server */
+      void connect_to_server();
 
       // member variables
-
+      int client_socket_fd; // file descriptor of the client to connect to
+                            // the server
+      sockaddr_in server_address; // sockaddr_in struct to store the details
+                            // of the ip address and port of the server
   };
   
 }
