@@ -12,14 +12,14 @@ For using:
 namespace chat::net {
 
   /* 
-  Function to create socket
+  Function to create a TCP socket using IPv4.
   Returns: Socket file descriptor
   */
   int create_socket();
 
   /*
-  Function to create the address
-  Returns: the address struct containing the details of the address
+  Function to create an IPv4 address (sockaddr_in)
+  Returns: the IPv4 address struct containing the details of the address
   */
   sockaddr_in create_address(
     int port /* port with which the address is binded */

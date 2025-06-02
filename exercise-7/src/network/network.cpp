@@ -8,8 +8,9 @@
 
 namespace chat::net {
   /*
-  A function to create a socket and return it
-  Returns: Socket
+  Creates a TCP socket using IPv4. If an error occurs, it reports
+  an error and terminates the program
+  Returns: File descriptor of the created socket
   */
   int create_socket() {
     int sock_fd = socket(AF_INET, SOCK_STREAM, 0);
