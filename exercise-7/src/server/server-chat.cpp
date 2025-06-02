@@ -5,7 +5,7 @@
 
 /* user-defined headers */
 #include "../utils.h"
-#include "../utils/network.h"
+#include "../network/network.h"
 #include "server-chat.h"
 
 namespace chat::server {
