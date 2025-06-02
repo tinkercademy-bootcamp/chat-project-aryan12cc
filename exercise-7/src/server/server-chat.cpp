@@ -14,8 +14,8 @@ namespace chat::server {
 
   /*
   Constructor for the class Server(). 
-  Creates socket for the server and starts listening for connections
-  from clients
+  Creates socket for the server and starts listening for incoming 
+  connections from clients
   */
   Server::Server(
     int port /* the port through which server will listen */
