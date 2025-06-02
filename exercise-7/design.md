@@ -76,7 +76,7 @@
 ```
 |-build/
 |-src/
-|    |-utils/
+|    |-network/
 |    |   |-- network.h
 |    |   |-- network.cpp
 |    |-server/
