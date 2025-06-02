@@ -14,7 +14,7 @@ namespace chat::net {
   */
   int create_socket() {
     int sock_fd = socket(AF_INET, SOCK_STREAM, 0);
-    check_error(sock_fd < 0, "Socket creation error\n");
+    check_error(sock_fd < 0, "Socket creation error\n"); // utils.h
     return sock_fd;
   }
 

@@ -56,9 +56,13 @@ namespace chat::server {
     */
     int opt = 1;
     setsockopt(listen_socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+
     check_error(bind(listen_socket_fd, (sockaddr *) &server_address, 
                 sizeof(server_address)) < 0, "Bind failed");
+      // utils.h
+
     check_error(listen(listen_socket_fd, 10) < 0, "Listen failed");
+      // utils.h
 
     return;
   }
