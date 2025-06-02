@@ -14,7 +14,8 @@ namespace chat::server {
 
   /*
   Constructor for the class Server(). 
-  Initializes member variables and member functions
+  Creates socket for the server and starts listening for connections
+  from clients
   */
   Server::Server(
     int port /* the port through which server will listen */
@@ -22,7 +23,7 @@ namespace chat::server {
 
     create_server_socket(port);
 
-    server_listen_for_connections();
+    initialize_epoll();
 
     return;
   }
@@ -73,9 +74,9 @@ namespace chat::server {
 
   /*
   Function to set the epoll file descriptor to listen to connections from
-  multiple sockets, and act upon them
+  multiple sockets
   */
-  void Server::server_listen_for_connections() {
+  void Server::initialize_epoll() {
     epoll_fd = epoll_create1(0);
 
     // make the epoll instance monitor the file descriptor listening

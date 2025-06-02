@@ -44,9 +44,10 @@ namespace chat::server {
 
       /*
       The function is used when the server is ready to accept connections
-      from clients. It runs in a loop, looking for any input / connections
+      from clients. It initializes the epoll file descriptors to hear
+      from other file descriptors.
       */
-     void server_listen_for_connections();
+     void initialize_epoll();
 
       // member variables
 
