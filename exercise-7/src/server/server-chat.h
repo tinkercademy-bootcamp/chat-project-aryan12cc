@@ -35,6 +35,13 @@ namespace chat::server {
       // member functions
 
       /*
+      This function handles the interaction loop with the clients
+      and gives / executes necessary instructions to the corresponding
+      channel
+      */
+     void communication_loop();
+
+      /*
       The function creates a server socket tied to the port as given
       in the parameter
       */
@@ -47,7 +54,7 @@ namespace chat::server {
       from clients. It initializes the epoll file descriptors to hear
       from other file descriptors.
       */
-     void initialize_epoll();
+      void initialize_epoll();
 
       // member variables
 

@@ -1,6 +1,7 @@
 // ./server/server-chat.cpp
 
 /* standard headers */
+#include <arpa/inet.h>
 #include <sys/epoll.h>
 #include <unistd.h>
 
@@ -25,6 +26,8 @@ namespace chat::server {
 
     initialize_epoll();
 
+    communication_loop();
+
     return;
   }
 
@@ -41,6 +44,41 @@ namespace chat::server {
 
   // --------------- PUBLIC FUNCTIONS END HERE ---------------
   // --------------- PRIVATE FUNCTIONS START HERE ---------------
+
+  void Server::communication_loop() {
+    constexpr int MAX_EVENTS = 10;
+    constexpr int BUF_SIZE = 1024;
+    struct epoll_event events[MAX_EVENTS];
+    struct sockaddr_in store_client_address; // store client address
+                                          // when accept() is called
+    socklen_t socket_length = sizeof(store_client_address);
+
+    char buffer[BUF_SIZE]; // can be used for anything
+      // for example, storing client ip, client message etc.
+
+    while(true) {
+      // getting all events happened before last interaction
+      int num_events = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+
+      // looping through all the events
+      for(int event_idx = 0; event_idx < num_events; event_idx++) {
+
+        // incoming connection
+        if(events[event_idx].data.fd == listen_socket_fd) {
+          std::cerr << "New incoming connection!" << std::endl;
+          // accept the incoming connection
+          int connection_socket = accept(listen_socket_fd, 
+                                (struct sockaddr*) &store_client_address,
+                                &socket_length);
+          // convert client ip to a string
+          inet_ntop(AF_INET, (char*) &store_client_address.sin_addr, buffer,
+                    sizeof(store_client_address));
+          std::cout << "Connected with client at address " << buffer << ":" 
+            << ntohs(store_client_address.sin_port) << std::endl;
+        }
+      }
+    }
+  }
 
   /*
   The function creates a server socket tied to the port as given
