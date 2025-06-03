@@ -4,11 +4,32 @@
 #include <iostream> // std::cout, std::endl
 
 /* user-defined headers */
+#include "../channels/channel-information.h"
+#include "../server-chat.h"
 #include "command.h"
 
 /* namespace for all commands */
 
 namespace chat::server::command {
+
+  std::string _execute_list() {
+  std::string result = ""; // stores the output to be printed to the client
+  
+  // Add namespace qualifier to all_channels
+  for(auto channel_pair : chat::server::all_channels) {
+    // Convert int to string with std::to_string
+    result += "Channel id: " + std::to_string(channel_pair.second.channel_id) + "\n";
+    result += "Channel name: " + channel_pair.second.get_channel_name() + "\n";
+    result += "\n"; // Add blank line between channels for readability
+  }
+  
+  // Return a helpful message if no channels exist
+  if (result.empty()) {
+    return "No channels available.";
+  }
+  
+  return result;
+}
 
   /*
   A function to read input from the client and parse it
@@ -22,11 +43,17 @@ namespace chat::server::command {
     int client_file_descriptor /* client id for now */
   ) {
     // check if data is empty
+    data = data.substr(0, data.size() - 1); // remove the null character
     if(data.empty() || data[0] != '/') {
       return std::make_pair(false, "Error: Invalid command");
     }
 
     std::string command = get_command_input(data);
+
+    // calling the corresponding function as the command
+    if(command == "list") {
+      return std::make_pair(true, _execute_list());
+    }
 
     return std::make_pair(true, command);
   }
@@ -45,12 +72,12 @@ namespace chat::server::command {
 
     // space not present
     if(space_pos == std::string::npos) {
-      command = data.substr(1, data.size()); // remove the `/`
+      command = data.substr(1); // remove the `/`
     }
     else {
-      command = data.substr(1, space_pos); // remove the `/`
+      command = data.substr(1, space_pos - 1); // remove the `/`
     }
     return command;
   }
 
-} // chat::server::commands
+} // chat::server::command

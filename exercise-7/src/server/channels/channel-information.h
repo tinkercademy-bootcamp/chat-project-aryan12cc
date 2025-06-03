@@ -27,6 +27,19 @@ namespace chat::server {
     public:
 
       // member functions
+      
+      /*
+        Paramterized constructor getting the values of the variables
+      */
+      Channel(
+        int id, /* stores the channel id*/
+        std::string name /* stores the channel name */
+      );
+
+      /*
+        Function to return the channel name in the object
+      */
+      std::string get_channel_name();
 
       // member variables
 

@@ -13,6 +13,12 @@
 /* namespace for all server related operations */
 namespace chat::server { 
 
+  /*
+  Maintaining an unordered map with key = channel_id
+  and value = the channel object with the corresponding channel_id
+  */
+  extern std::map<int, Channel> all_channels;
+
   /* 
   Server() class containing all server related operations:
   - The data stored by Server() class
@@ -36,7 +42,6 @@ namespace chat::server {
       ~Server();
 
       // public variables
-      std::map<int, Channel> all_channels;
     
     // private functions and variables, only accessible by functions and 
     // variables of the same class

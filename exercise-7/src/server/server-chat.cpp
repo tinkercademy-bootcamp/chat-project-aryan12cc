@@ -14,6 +14,9 @@
 #include "server-chat.h"
 
 namespace chat::server {
+
+  std::map<int, Channel> all_channels; // defining all_channels
+
   // --------------- PUBLIC FUNCTIONS START HERE ---------------
 
   /*

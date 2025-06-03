@@ -20,6 +20,14 @@
 */
 
 namespace chat::server::command {
+  // all command executing functions start with _execute
+
+  /*
+  This function executes the list command given by the client
+  Return: Data in a formatted order
+  */
+  std::string _execute_list();
+
   /*
   This function takes the input and the client from which it came from
   Returns: A pair of boolean and std::string
@@ -29,7 +37,7 @@ namespace chat::server::command {
   */
   std::pair<bool, std::string> parse_client_command(
     std::string data, /* data sent by the client */
-    int client_file_desciptor /* the file descriptor from which it was 
+    int client_file_descriptor /* the file descriptor from which it was 
                                 sent */
   );
     
@@ -43,6 +51,6 @@ namespace chat::server::command {
                     to get extracted */
   );
       
-} // chat::server::commands
+} // chat::server::command
 
 #endif
