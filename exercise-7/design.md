@@ -35,7 +35,7 @@
 - Clients can have a look at the requests sent to them while they were offline
 - Have a look at `ncurses` and `libsdl2`
 
-### Feedbacks to Incorporate
+### Feedback to Incorporate
 
 - Handle graceful closing of socket in all cases
 - Ctrl + C exception handlers

@@ -93,7 +93,8 @@ namespace chat::server {
           
           // add the file descriptor to the list of epoll file descriptor 
           // list for monitoring
-          net::epoll_ctl_add(epoll_fd_, connection_socket, EPOLLIN); 
+          net::epoll_ctl_add(epoll_fd_, connection_socket, EPOLLIN | 
+                              EPOLLHUP | EPOLLRDHUP); 
               // src/network/network.h
         }
         // someone sent an input
@@ -116,6 +117,30 @@ namespace chat::server {
               write(events[event_idx].data.fd, buffer, strlen(buffer));
             }
           }
+        }
+
+        // check if the connection is closing
+        if(events[event_idx].events & (EPOLLHUP | EPOLLRDHUP)) {
+          // Get client info from socket
+          std::string client_info = "unknown";
+          
+          if(getpeername(events[event_idx].data.fd, 
+              reinterpret_cast<struct sockaddr*>(&store_client_address), 
+              &socket_length) == 0) {
+            // Convert IP to string
+            char ip_str[INET_ADDRSTRLEN];
+            inet_ntop(AF_INET, &store_client_address.sin_addr, ip_str, INET_ADDRSTRLEN);
+            
+            // Format as IP:port
+            client_info = std::string(ip_str) + ":" + 
+                          std::to_string(ntohs(store_client_address.sin_port));
+          }
+          
+          std::cout << "Connection closed with client " << client_info << std::endl;
+          
+          // Clean up resources
+          close(events[event_idx].data.fd);
+          epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, events[event_idx].data.fd, nullptr);
         }
       }
     }
