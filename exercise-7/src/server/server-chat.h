@@ -35,6 +35,12 @@ namespace chat::server {
       // member functions
 
       /*
+      This function accepts an incoming request from the client side to
+      connect to the server
+      */
+      void accept_incoming_request();
+
+      /*
       This function handles the interaction loop with the clients
       and gives / executes necessary instructions to the corresponding
       channel

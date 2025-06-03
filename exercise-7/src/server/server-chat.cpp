@@ -50,6 +50,39 @@ namespace chat::server {
   // --------------- PUBLIC FUNCTIONS END HERE ---------------
   // --------------- PRIVATE FUNCTIONS START HERE ---------------
 
+  // Function to accept an incoming connection request from the client
+  void Server::accept_incoming_request() {
+    struct sockaddr_in store_client_address; // store client address
+                                          // when accept() is called
+    socklen_t socket_length = sizeof(store_client_address);
+                                        // size of sockaddr_in struct
+
+    char ip_buffer[BUF_SIZE]; // can be used for anything
+      // for example, storing client ip, client message etc.
+    int connection_socket = accept(listen_socket_fd_, 
+      (struct sockaddr*) &store_client_address, &socket_length);
+
+    // convert client ip to a string
+    clear_buffer(ip_buffer); // utils.h
+    inet_ntop(AF_INET, (char*) &store_client_address.sin_addr, ip_buffer,
+      sizeof(store_client_address));
+
+    std::cout << "Connected with client at address " << ip_buffer << ":" 
+      << ntohs(store_client_address.sin_port) << std::endl;
+
+    // set the client socket to non blocking mode using O_NONBLOCK
+    check_error(fcntl(connection_socket, F_SETFL, 
+      fcntl(connection_socket, F_GETFL, 0) | O_NONBLOCK) == -1,
+      "Non-blocking socket failed");
+    // utils.h
+
+    // add the file descriptor to the list of epoll file descriptor 
+    // list for monitoring
+    net::epoll_ctl_add(epoll_fd_, connection_socket, EPOLLIN | 
+        EPOLLHUP | EPOLLRDHUP); 
+    // src/network/network.h
+  }
+
   // Loop that waits indefinitely for events on the file descriptors that
   // are registered on the epoll instance.
   void Server::communication_loop() {
@@ -74,28 +107,7 @@ namespace chat::server {
         // incoming connection
         if(events[event_idx].data.fd == listen_socket_fd_) {
           // accept the incoming connection
-          int connection_socket = accept(listen_socket_fd_, 
-                                (struct sockaddr*) &store_client_address,
-                                &socket_length);
-          // convert client ip to a string
-          clear_buffer(buffer); // utils.h
-          inet_ntop(AF_INET, (char*) &store_client_address.sin_addr, buffer,
-                    sizeof(store_client_address));
-
-          std::cout << "Connected with client at address " << buffer << ":" 
-            << ntohs(store_client_address.sin_port) << std::endl;
-          
-          // set the client socket to non blocking mode using O_NONBLOCK
-          check_error(fcntl(connection_socket, F_SETFL, 
-            fcntl(connection_socket, F_GETFL, 0) | O_NONBLOCK) == -1,
-            "Non-blocking socket failed");
-            // utils.h
-          
-          // add the file descriptor to the list of epoll file descriptor 
-          // list for monitoring
-          net::epoll_ctl_add(epoll_fd_, connection_socket, EPOLLIN | 
-                              EPOLLHUP | EPOLLRDHUP); 
-              // src/network/network.h
+          accept_incoming_request();
         }
         // someone sent an input
         else if(events[event_idx].events & EPOLLIN) {
