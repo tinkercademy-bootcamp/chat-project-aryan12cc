@@ -1,4 +1,4 @@
-// ./network/network.cpp
+// src/network/network.cpp
 
 /* standard headers */
 #include <sys/epoll.h>

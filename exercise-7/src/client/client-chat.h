@@ -1,4 +1,4 @@
-// ./client/client-chat.h
+// src/client/client-chat.h
 
 #ifndef __CLIENT_CHAT_H__
 #define __CLIENT_CHAT_H__

@@ -1,4 +1,4 @@
-// ./network/network.h
+// src/network/network.h
 
 #ifndef __NETWORK_H__
 #define __NETWORK_H__

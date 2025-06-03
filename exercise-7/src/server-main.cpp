@@ -1,4 +1,4 @@
-// ./server-main.cpp
+// src/server-main.cpp
 
 /* standard headers */
 #include <iostream>
@@ -10,5 +10,6 @@ const int PORT = 8080;
 
 int main() {
   // calling the server to listen through port = PORT
-  chat::server::Server chat_server(PORT); // src/server/server-chat.h
+  chat::server::Server chat_server(PORT); 
+    // src/server/server-chat.h
 }

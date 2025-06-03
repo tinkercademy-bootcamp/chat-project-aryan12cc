@@ -1,1 +1,1 @@
-// ./server/channels/channel-information.cpp
+// src/server/channels/channel-information.cpp

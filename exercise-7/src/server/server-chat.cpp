@@ -1,4 +1,4 @@
-// ./server/server-chat.cpp
+// src/server/server-chat.cpp
 
 /* standard headers */
 #include <arpa/inet.h>

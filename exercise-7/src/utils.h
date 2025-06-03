@@ -1,4 +1,4 @@
-// ./utils.h
+// src/utils.h
 
 // header guard for utils.h. Ensures that the header is included atmost
 // once while compiling

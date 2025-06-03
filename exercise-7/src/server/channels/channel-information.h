@@ -1,1 +1,1 @@
-// ./server/channels/channel-information.h
+// src/server/channels/channel-information.h

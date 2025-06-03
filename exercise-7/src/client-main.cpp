@@ -1,4 +1,4 @@
-// ./src/client-main.cpp
+// src/client-main.cpp
 
 /* standard headers */
 
@@ -15,5 +15,5 @@ int main() {
   // parameterized constructor with port = PORT, signifying to
   // connect to the server on that specific port
   chat::client::Client chat_client(PORT); 
-    // ./src/client/client-chat.h
+    // src/client/client-chat.h
 }
