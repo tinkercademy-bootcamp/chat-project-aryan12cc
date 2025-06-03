@@ -73,7 +73,7 @@ namespace chat::client {
       
       // check for activity from server
       if(FD_ISSET(client_socket_fd, &active_file_descriptors)) {
-        set_buffer_to_zero(buffer);
+        clear_buffer(buffer);
         
         // read message from server
         int bytes_read = read(client_socket_fd, buffer, BUF_SIZE - 1);

@@ -71,7 +71,7 @@ namespace chat::server {
                                 (struct sockaddr*) &store_client_address,
                                 &socket_length);
           // convert client ip to a string
-          set_buffer_to_zero(buffer);
+          clear_buffer(buffer);
           inet_ntop(AF_INET, (char*) &store_client_address.sin_addr, buffer,
                     sizeof(store_client_address));
 
@@ -90,7 +90,7 @@ namespace chat::server {
         // someone sent an input
         else if(events[event_idx].events && EPOLLIN) {
           while(true) {
-            set_buffer_to_zero(buffer);
+            clear_buffer(buffer);
             int bytes_read = read(events[event_idx].data.fd, buffer, 
                                   sizeof(buffer));
 

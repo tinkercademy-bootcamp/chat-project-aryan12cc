@@ -33,7 +33,7 @@ namespace chat {
 
   // Function to set the buffer size to 0. Takes in the start pointer as
   // the parameter and sets all 1024 bytes after the start pointer as '\0'
-  inline void set_buffer_to_zero(char* buffer) {
+  inline void clear_buffer(char* buffer) {
     std::memset(buffer, 0, BUF_SIZE);
   }
 
