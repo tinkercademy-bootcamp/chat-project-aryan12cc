@@ -154,7 +154,10 @@ namespace chat::server {
     // Start listening on socket. Allow upto 10 backlogged connections
     check_error(listen(listen_socket_fd_, 10) < 0, "Listen failed");
       // utils.h
-
+    
+    // Print a message to denote server has started listening
+    std::cout << "Server has started listening on port " << port << std::endl;
+    
     return;
   }
 
