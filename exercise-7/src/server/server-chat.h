@@ -5,8 +5,10 @@
 
 /* standard headers */
 #include <string> // std::string
+#include <map> // std::unordered_map
 
 /* user-defined headers */
+#include "channels/channel-information.h"
 
 /* namespace for all server related operations */
 namespace chat::server { 
@@ -32,6 +34,9 @@ namespace chat::server {
 
       /* Destructor to ensure cleanup of sockets */
       ~Server();
+
+      // public variables
+      std::map<int, Channel> all_channels;
     
     // private functions and variables, only accessible by functions and 
     // variables of the same class
