@@ -94,9 +94,6 @@ namespace chat::server {
     socklen_t socket_length = sizeof(store_client_address);
                                         // size of sockaddr_in struct
 
-    char buffer[BUF_SIZE]; // can be used for anything
-      // for example, storing client ip, client message etc.
-
     while(true) {
       // getting all events happened before last interaction
       int num_events = epoll_wait(epoll_fd_, events, MAX_EVENTS, -1);
@@ -111,24 +108,7 @@ namespace chat::server {
         }
         // someone sent an input
         else if(events[event_idx].events & EPOLLIN) {
-          while(true) {
-            clear_buffer(buffer); // utils.h
-
-            // read the message
-            int bytes_read = read(events[event_idx].data.fd, buffer, 
-                                  sizeof(buffer));
-
-            // all data read
-            if(bytes_read <= 0) {
-              break;
-            }
-            else {
-              std::cout << "Received: " << buffer << std::endl;
-
-              // write the message back
-              write(events[event_idx].data.fd, buffer, strlen(buffer));
-            }
-          }
+          read_input_from_client(events[event_idx].data.fd);
         }
 
         // check if the connection is closing
@@ -211,6 +191,33 @@ namespace chat::server {
     net::epoll_ctl_add(epoll_fd_, listen_socket_fd_, EPOLLIN);
 
     return;
+  }
+
+  /*
+  Function to read the input data sent by the client to the server
+  */
+  void Server::read_input_from_client(
+    int file_descriptor /* the file descriptor to read it from */
+  ) {
+    char read_buffer[BUF_SIZE];
+    while(true) {
+      clear_buffer(read_buffer); // utils.h
+
+      // read the message
+      int bytes_read = read(file_descriptor, read_buffer, 
+                            sizeof(read_buffer));
+
+      // all data read
+      if(bytes_read <= 0) {
+        break;
+      }
+      else {
+        std::cout << "Received: " << read_buffer << std::endl;
+
+        // write the message back
+        write(file_descriptor, read_buffer, strlen(read_buffer));
+      }
+    }
   }
 
   // --------------- PRIVATE FUNCTIONS END HERE ---------------

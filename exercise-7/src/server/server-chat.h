@@ -62,6 +62,13 @@ namespace chat::server {
       */
       void initialize_epoll();
 
+      /*
+      
+      */
+      void read_input_from_client(
+        int file_descriptor /* The file descriptor to read the input from */
+      );
+
       // member variables
 
       int epoll_fd_; // file descriptor for epoll used to monitor multiple
