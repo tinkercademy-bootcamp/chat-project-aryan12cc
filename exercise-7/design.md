@@ -35,6 +35,18 @@
 - Clients can have a look at the requests sent to them while they were offline
 - Have a look at `ncurses` and `libsdl2`
 
+### Feedbacks to Incorporate
+
+- Handle graceful closing of socket in all cases
+- Ctrl + C exception handlers
+- Follow Law of Three
+- No large chunks of code commented out
+- Add comments, especially in header files
+- Private member functions to end with a `_`
+- Use `std::concepts` in `check_error()`
+- Ensure no redundant branching
+- Return a boolean with check_error if there is an error and you will not terminate, so that it gets logged
+
 ## Working
 
 `*` indicates a requirement from **Further Suggestions**
