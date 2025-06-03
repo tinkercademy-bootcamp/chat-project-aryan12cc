@@ -95,6 +95,9 @@
 |    |   |--channels/
 |    |   |     |-- channel-information.h
 |    |   |     |-- channel-information.cpp
+|    |   |--commands/
+|    |   |     |-- commands.h
+|    |   |     |-- commands.cpp
 |    |   |-- server-chat.h
 |    |   |-- server-chat.cpp
 |    |-client/
