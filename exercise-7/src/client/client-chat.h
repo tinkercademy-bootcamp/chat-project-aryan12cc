@@ -6,7 +6,7 @@
 /* standard headers */
 
 /* user-defined headers */
-#include <netinet/in.h>
+#include <netinet/in.h> // sockaddr_in struct
 
 /* namespace for all client related operations */
 namespace chat::client { 

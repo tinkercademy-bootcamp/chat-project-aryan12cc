@@ -1,8 +1,8 @@
 // src/client/client-chat.cpp
 
 /* standard headers */
-#include <string>
-#include <unistd.h>
+#include <string> // std::string, std::getline
+#include <unistd.h> // read(), write(), close() etc
 
 /* user-defined headers */
 #include "../network/network.h"
@@ -16,7 +16,9 @@ namespace chat::client {
   Constructor for the class Client(). 
   Initializes member variables and member functions
   */
-  Client::Client(int port) {
+  Client::Client(
+    int port /* port used to connect the client with the server */
+  ) {
 
     client_setup_socket(port); // setup socket for communication
 
@@ -40,9 +42,11 @@ namespace chat::client {
   Function to effectively setup the socket needed to connect
   to the server
   */
-  void Client::client_setup_socket(int port) {
+  void Client::client_setup_socket(
+    int port /* port used to connect the client with the server */
+  ) {
     client_socket_fd_ = net::create_socket(); // network/network.h
-    server_address_ = net::create_address(port);
+    server_address_ = net::create_address(port); // network/network.h
   }
 
   /*
@@ -69,15 +73,16 @@ namespace chat::client {
       int activity_result = select(max_file_descriptor + 1, 
                             &active_file_descriptors, NULL, NULL, NULL);
       
-      check_error(activity_result < 0, "Error in select() call");
+      check_error(activity_result < 0, "Error in select() call"); // utils.h
       
       // check for activity from server
       if(FD_ISSET(client_socket_fd_, &active_file_descriptors)) {
-        clear_buffer(buffer);
+        clear_buffer(buffer); // utils.h
         
         // read message from server
         int bytes_read = read(client_socket_fd_, buffer, BUF_SIZE - 1);
         
+        // there is some message that has come from the server
         if(bytes_read > 0) {
           buffer[bytes_read] = '\0';
           std::cout << "From server: " << buffer << std::endl;
@@ -106,6 +111,7 @@ namespace chat::client {
         // write to server
         check_error(write(client_socket_fd_, input.c_str(), input.size() + 1) 
                   <= 0, "Failed to write from client to server");
+                  // utils.h
       }
     }
   }
@@ -119,6 +125,7 @@ namespace chat::client {
     // the program
     check_error(connect(client_socket_fd_, (sockaddr *) &server_address_, 
                   sizeof(server_address_)) < 0, "Connection Failed");
+                  // utils.h
   }
 
   // --------------- PRIVATE FUNCTIONS END HERE ---------------
