@@ -83,16 +83,44 @@ namespace chat::server {
     // src/network/network.h
   }
 
+  // Function to gracefully close the connection between the server and
+  // client after client disconnects
+  void Server::close_client_connection(
+    int file_descriptor /* the file descriptor to close connection from */
+  ) {
+    // Get client info from socket
+    std::string client_info = "unknown";
+
+    struct sockaddr_in store_client_address; // store client address
+                                          // when accept() is called
+    socklen_t socket_length = sizeof(store_client_address);
+                                        // size of sockaddr_in struct
+          
+    if(getpeername(file_descriptor, 
+        reinterpret_cast<struct sockaddr*>(&store_client_address), 
+        &socket_length) == 0) {
+      // Convert IP to string
+      char ip_str[INET_ADDRSTRLEN];
+      inet_ntop(AF_INET, &store_client_address.sin_addr, ip_str, INET_ADDRSTRLEN);
+      
+      // Format as IP:port
+      client_info = std::string(ip_str) + ":" + 
+                    std::to_string(ntohs(store_client_address.sin_port));
+    }
+    
+    std::cout << "Connection closed with client " << client_info << std::endl;
+    
+    // Clean up resources
+    close(file_descriptor);
+    epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, file_descriptor, nullptr);
+  }
+
   // Loop that waits indefinitely for events on the file descriptors that
   // are registered on the epoll instance.
   void Server::communication_loop() {
     constexpr int MAX_EVENTS = 10; // max events to process at one go
     struct epoll_event events[MAX_EVENTS]; // stores all events after the
                                   // last time it was checked
-    struct sockaddr_in store_client_address; // store client address
-                                          // when accept() is called
-    socklen_t socket_length = sizeof(store_client_address);
-                                        // size of sockaddr_in struct
 
     while(true) {
       // getting all events happened before last interaction
@@ -113,26 +141,7 @@ namespace chat::server {
 
         // check if the connection is closing
         if(events[event_idx].events & (EPOLLHUP | EPOLLRDHUP)) {
-          // Get client info from socket
-          std::string client_info = "unknown";
-          
-          if(getpeername(events[event_idx].data.fd, 
-              reinterpret_cast<struct sockaddr*>(&store_client_address), 
-              &socket_length) == 0) {
-            // Convert IP to string
-            char ip_str[INET_ADDRSTRLEN];
-            inet_ntop(AF_INET, &store_client_address.sin_addr, ip_str, INET_ADDRSTRLEN);
-            
-            // Format as IP:port
-            client_info = std::string(ip_str) + ":" + 
-                          std::to_string(ntohs(store_client_address.sin_port));
-          }
-          
-          std::cout << "Connection closed with client " << client_info << std::endl;
-          
-          // Clean up resources
-          close(events[event_idx].data.fd);
-          epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, events[event_idx].data.fd, nullptr);
+          close_client_connection(events[event_idx].data.fd);
         }
       }
     }

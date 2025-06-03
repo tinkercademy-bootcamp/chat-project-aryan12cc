@@ -41,6 +41,15 @@ namespace chat::server {
       void accept_incoming_request();
 
       /*
+      Close the connection between client and server gracefully after the
+      client has gone offline
+      */
+      void close_client_connection(
+        int file_descriptor /* the file descriptor from which the connection 
+                            needs to be closed */
+      );
+
+      /*
       This function handles the interaction loop with the clients
       and gives / executes necessary instructions to the corresponding
       channel
