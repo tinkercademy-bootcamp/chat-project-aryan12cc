@@ -3,7 +3,7 @@
 #ifndef __NETWORK_H__
 #define __NETWORK_H__
 
-#include <netinet/in.h> 
+#include <netinet/in.h> // sockaddr_in struct
 
 namespace chat::net {
 

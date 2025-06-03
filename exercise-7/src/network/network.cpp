@@ -1,7 +1,7 @@
 // src/network/network.cpp
 
 /* standard headers */
-#include <sys/epoll.h>
+#include <sys/epoll.h> // struct epoll_event, epoll_ctl
 
 /* user-defined headers */
 #include "network.h"
@@ -31,7 +31,7 @@ namespace chat::net {
     address.sin_family = AF_INET;
 
     // 
-    address.sin_port = htons(port);
+    address.sin_port = htons(port); // included as a part of network.h
     address.sin_addr.s_addr = INADDR_ANY;
     return address;
   }
@@ -50,7 +50,7 @@ namespace chat::net {
 
     check_error(epoll_ctl(epoll_file_descriptor, EPOLL_CTL_ADD, 
                         monitor_file_descriptor, &event) == -1,
-                        "Epoll ctl() failed");
+                        "Epoll ctl() failed"); // utils.h
     
   }
 }
