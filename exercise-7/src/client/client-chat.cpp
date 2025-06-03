@@ -118,7 +118,7 @@ namespace chat::client {
     // On failure, prints "Connection Failed" and terminates
     // the program
     check_error(connect(client_socket_fd_, (sockaddr *) &server_address_, 
-                  sizeof(server_address_)), "Connection Failed");
+                  sizeof(server_address_)) < 0, "Connection Failed");
   }
 
   // --------------- PRIVATE FUNCTIONS END HERE ---------------

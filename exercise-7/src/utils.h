@@ -6,10 +6,11 @@
 #define UTILS_H
 
 /* standard headers */
-#include <concepts>
+#include <concepts> // Functions: stdd::convertible_to
 #include <cstring> // Functions: std::memset
 #include <iostream> // Functions: std::cerr
-#include <string>
+#include <string> // Function: std::string
+#include <type_traits> // Functions: std::is_integral_v, std::is_same_v
 
 /* user-defined headers */
 
