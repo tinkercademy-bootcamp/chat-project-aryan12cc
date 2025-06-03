@@ -50,9 +50,9 @@ namespace chat::client {
       void connect_to_server();
 
       // member variables
-      int client_socket_fd; // file descriptor of the client to connect to
+      int client_socket_fd_; // file descriptor of the client to connect to
                             // the server
-      sockaddr_in server_address; // sockaddr_in struct to store the details
+      sockaddr_in server_address_; // sockaddr_in struct to store the details
                             // of the ip address and port of the server
   };
   

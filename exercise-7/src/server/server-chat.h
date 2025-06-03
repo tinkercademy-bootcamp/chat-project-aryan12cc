@@ -58,10 +58,10 @@ namespace chat::server {
 
       // member variables
 
-      int epoll_fd; // file descriptor for epoll used to monitor multiple
+      int epoll_fd_; // file descriptor for epoll used to monitor multiple
                     // sockets
 
-      int listen_socket_fd; // file descriptor for the server's listening
+      int listen_socket_fd_; // file descriptor for the server's listening
                             // socket
   };
   

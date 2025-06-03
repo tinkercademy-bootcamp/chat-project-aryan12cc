@@ -39,8 +39,8 @@ namespace chat::server {
   */
   Server::~Server() {
 
-    close(epoll_fd);
-    close(listen_socket_fd);
+    close(epoll_fd_);
+    close(listen_socket_fd_);
     return;
   }
 
@@ -59,15 +59,15 @@ namespace chat::server {
 
     while(true) {
       // getting all events happened before last interaction
-      int num_events = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+      int num_events = epoll_wait(epoll_fd_, events, MAX_EVENTS, -1);
 
       // looping through all the events
       for(int event_idx = 0; event_idx < num_events; event_idx++) {
 
         // incoming connection
-        if(events[event_idx].data.fd == listen_socket_fd) {
+        if(events[event_idx].data.fd == listen_socket_fd_) {
           // accept the incoming connection
-          int connection_socket = accept(listen_socket_fd, 
+          int connection_socket = accept(listen_socket_fd_, 
                                 (struct sockaddr*) &store_client_address,
                                 &socket_length);
           // convert client ip to a string
@@ -84,7 +84,7 @@ namespace chat::server {
           
           // add the file descriptor to the list of epoll file descriptor 
           // list for monitoring
-          net::epoll_ctl_add(epoll_fd, connection_socket, EPOLLIN); 
+          net::epoll_ctl_add(epoll_fd_, connection_socket, EPOLLIN); 
               // src/network/network.h
         }
         // someone sent an input
@@ -115,7 +115,7 @@ namespace chat::server {
   void Server::create_server_socket(
     int port /* the port through which server will listen */
   ) {
-    listen_socket_fd = net::create_socket(); 
+    listen_socket_fd_ = net::create_socket(); 
       // src/network/network.h 
     
     sockaddr_in server_address = net::create_address(port); 
@@ -126,17 +126,17 @@ namespace chat::server {
     - SO_REUSEADDR to immediately bind the socket to a port
     */
     int opt = 1;
-    setsockopt(listen_socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    setsockopt(listen_socket_fd_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
-    check_error(bind(listen_socket_fd, (sockaddr *) &server_address, 
+    check_error(bind(listen_socket_fd_, (sockaddr *) &server_address, 
                 sizeof(server_address)) < 0, "Bind failed");
       // utils.h
     
-    check_error(fcntl(listen_socket_fd, F_SETFL, 
-      fcntl(listen_socket_fd, F_GETFL, 0) | O_NONBLOCK) == -1,
+    check_error(fcntl(listen_socket_fd_, F_SETFL, 
+      fcntl(listen_socket_fd_, F_GETFL, 0) | O_NONBLOCK) == -1,
       "Non-blocking socket failed"); // utils.h
 
-    check_error(listen(listen_socket_fd, 10) < 0, "Listen failed");
+    check_error(listen(listen_socket_fd_, 10) < 0, "Listen failed");
       // utils.h
 
     return;
@@ -147,11 +147,11 @@ namespace chat::server {
   multiple sockets
   */
   void Server::initialize_epoll() {
-    epoll_fd = epoll_create1(0);
+    epoll_fd_ = epoll_create1(0);
 
     // make the epoll instance monitor the file descriptor listening
     // for incoming connections for any input
-    net::epoll_ctl_add(epoll_fd, listen_socket_fd, EPOLLIN);
+    net::epoll_ctl_add(epoll_fd_, listen_socket_fd_, EPOLLIN);
 
     return;
   }
