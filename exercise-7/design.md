@@ -77,6 +77,7 @@
   - `/leave <channel_id>` Leave channel with corresponding channel_id
   - `/list-all` List channels (will show ID mapping with names)
     - *`list <channel_id>` Detailed info about a channel prints the members of the channel
+  - `/message <channel_id> <message>` Broadcasts the message to channel_id
   - *`/login <phone_number> <username>`
   - *`/register <phone_number> <username>`
   - *`/request-add <channel_id>` Request another client to be added to the `channel_id`. Needs to be an `admin` of `channel_id` channel.
@@ -95,9 +96,9 @@
 |    |   |--channels/
 |    |   |     |-- channel-information.h
 |    |   |     |-- channel-information.cpp
-|    |   |--commands/
-|    |   |     |-- commands.h
-|    |   |     |-- commands.cpp
+|    |   |--command/
+|    |   |     |-- command.h
+|    |   |     |-- command.cpp
 |    |   |-- server-chat.h
 |    |   |-- server-chat.cpp
 |    |-client/
