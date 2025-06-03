@@ -3,6 +3,11 @@
 #ifndef __SERVER_CHAT_H__
 #define __SERVER_CHAT_H__
 
+/* standard headers */
+#include <string> // std::string
+
+/* user-defined headers */
+
 /* namespace for all server related operations */
 namespace chat::server { 
 
@@ -72,9 +77,10 @@ namespace chat::server {
       void initialize_epoll();
 
       /*
-      
+      Function to read input data sent from the client to the server
+      Returns: The input data in std::string form
       */
-      void read_input_from_client(
+      std::string read_input_from_client(
         int file_descriptor /* The file descriptor to read the input from */
       );
 

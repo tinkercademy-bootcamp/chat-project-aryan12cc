@@ -2,8 +2,8 @@
 
 /* standard headers */
 #include <arpa/inet.h> // sockaddr_in struct, inet_ntop(), htons()
+#include <array> // std::array
 #include <fcntl.h> // fcntl, O_NONBLOCK
-#include <string> // std::string
 #include <sys/epoll.h> // epoll_create1, epoll_wait, epoll_event
 #include <unistd.h> // close, read, write, accept
 
@@ -136,7 +136,8 @@ namespace chat::server {
         }
         // someone sent an input
         else if(events[event_idx].events & EPOLLIN) {
-          read_input_from_client(events[event_idx].data.fd);
+          std::string input = 
+            read_input_from_client(events[event_idx].data.fd);
         }
 
         // check if the connection is closing
@@ -205,28 +206,30 @@ namespace chat::server {
   /*
   Function to read the input data sent by the client to the server
   */
-  void Server::read_input_from_client(
+  std::string Server::read_input_from_client(
     int file_descriptor /* the file descriptor to read it from */
   ) {
-    char read_buffer[BUF_SIZE];
+    std::array<char, BUF_SIZE> read_buffer{};
+    std::string input_data; // to store the input data
     while(true) {
-      clear_buffer(read_buffer); // utils.h
-
       // read the message
-      int bytes_read = read(file_descriptor, read_buffer, 
-                            sizeof(read_buffer));
-
+      int bytes_read = read(file_descriptor, read_buffer.data(),
+                              read_buffer.size());
       // all data read
       if(bytes_read <= 0) {
         break;
       }
-      else {
-        std::cout << "Received: " << read_buffer << std::endl;
 
-        // write the message back
-        write(file_descriptor, read_buffer, strlen(read_buffer));
-      }
+      read_buffer[bytes_read] = '\0'; // null terminate
+
+      input_data = std::string(read_buffer.data(), bytes_read);
+              // convert to std::string
+      std::cout << "Received: " << input_data << std::endl;
+
+      // write the message back
+      write(file_descriptor, input_data.c_str(), input_data.size());
     }
+    return input_data;
   }
 
   // --------------- PRIVATE FUNCTIONS END HERE ---------------
