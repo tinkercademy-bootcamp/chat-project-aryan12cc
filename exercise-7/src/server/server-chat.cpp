@@ -1,11 +1,11 @@
 // src/server/server-chat.cpp
 
 /* standard headers */
-#include <arpa/inet.h>
-#include <fcntl.h>
-#include <string>
-#include <sys/epoll.h>
-#include <unistd.h>
+#include <arpa/inet.h> // sockaddr_in struct, inet_ntop(), htons()
+#include <fcntl.h> // fcntl, O_NONBLOCK
+#include <string> // std::string
+#include <sys/epoll.h> // epoll_create1, epoll_wait, epoll_event
+#include <unistd.h> // close, read, write, accept
 
 /* user-defined headers */
 #include "../utils.h"
@@ -24,10 +24,13 @@ namespace chat::server {
     int port /* the port through which server will listen */
   ) {
 
+    // Create socket, bind and listen to it for incoming connections
     create_server_socket(port);
 
+    // Initialize epoll manager for event monitoring of sockets
     initialize_epoll();
 
+    // Loop to communicate with the clients
     communication_loop();
 
     return;
@@ -47,12 +50,16 @@ namespace chat::server {
   // --------------- PUBLIC FUNCTIONS END HERE ---------------
   // --------------- PRIVATE FUNCTIONS START HERE ---------------
 
+  // Loop that waits indefinitely for events on the file descriptors that
+  // are registered on the epoll instance.
   void Server::communication_loop() {
-    constexpr int MAX_EVENTS = 10;
-    struct epoll_event events[MAX_EVENTS];
+    constexpr int MAX_EVENTS = 10; // max events to process at one go
+    struct epoll_event events[MAX_EVENTS]; // stores all events after the
+                                  // last time it was checked
     struct sockaddr_in store_client_address; // store client address
                                           // when accept() is called
     socklen_t socket_length = sizeof(store_client_address);
+                                        // size of sockaddr_in struct
 
     char buffer[BUF_SIZE]; // can be used for anything
       // for example, storing client ip, client message etc.
@@ -71,16 +78,18 @@ namespace chat::server {
                                 (struct sockaddr*) &store_client_address,
                                 &socket_length);
           // convert client ip to a string
-          clear_buffer(buffer);
+          clear_buffer(buffer); // utils.h
           inet_ntop(AF_INET, (char*) &store_client_address.sin_addr, buffer,
                     sizeof(store_client_address));
 
           std::cout << "Connected with client at address " << buffer << ":" 
             << ntohs(store_client_address.sin_port) << std::endl;
           
+          // set the client socket to non blocking mode using O_NONBLOCK
           check_error(fcntl(connection_socket, F_SETFL, 
             fcntl(connection_socket, F_GETFL, 0) | O_NONBLOCK) == -1,
             "Non-blocking socket failed");
+            // utils.h
           
           // add the file descriptor to the list of epoll file descriptor 
           // list for monitoring
@@ -88,9 +97,11 @@ namespace chat::server {
               // src/network/network.h
         }
         // someone sent an input
-        else if(events[event_idx].events && EPOLLIN) {
+        else if(events[event_idx].events & EPOLLIN) {
           while(true) {
-            clear_buffer(buffer);
+            clear_buffer(buffer); // utils.h
+
+            // read the message
             int bytes_read = read(events[event_idx].data.fd, buffer, 
                                   sizeof(buffer));
 
@@ -100,6 +111,8 @@ namespace chat::server {
             }
             else {
               std::cout << "Received: " << buffer << std::endl;
+
+              // write the message back
               write(events[event_idx].data.fd, buffer, strlen(buffer));
             }
           }
@@ -128,14 +141,17 @@ namespace chat::server {
     int opt = 1;
     setsockopt(listen_socket_fd_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
+    // Bind socket to IP and port specified in server_address
     check_error(bind(listen_socket_fd_, (sockaddr *) &server_address, 
                 sizeof(server_address)) < 0, "Bind failed");
       // utils.h
     
+    // Set socket to non-blocking mode
     check_error(fcntl(listen_socket_fd_, F_SETFL, 
       fcntl(listen_socket_fd_, F_GETFL, 0) | O_NONBLOCK) == -1,
       "Non-blocking socket failed"); // utils.h
-
+    
+    // Start listening on socket. Allow upto 10 backlogged connections
     check_error(listen(listen_socket_fd_, 10) < 0, "Listen failed");
       // utils.h
 
@@ -147,6 +163,7 @@ namespace chat::server {
   multiple sockets
   */
   void Server::initialize_epoll() {
+    // Create an epoll instance. epoll_fd_ stores the file descriptor
     epoll_fd_ = epoll_create1(0);
 
     // make the epoll instance monitor the file descriptor listening
