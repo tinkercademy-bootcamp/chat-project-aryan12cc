@@ -78,9 +78,8 @@ namespace chat::server {
 
       /*
       Function to read input data sent from the client to the server
-      Returns: The input data in std::string form
       */
-      std::string read_input_from_client(
+      void read_input_from_client(
         int file_descriptor /* The file descriptor to read the input from */
       );
 

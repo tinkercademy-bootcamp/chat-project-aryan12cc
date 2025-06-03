@@ -10,6 +10,7 @@
 /* user-defined headers */
 #include "../utils.h"
 #include "../network/network.h"
+#include "command/command.h"
 #include "server-chat.h"
 
 namespace chat::server {
@@ -136,8 +137,7 @@ namespace chat::server {
         }
         // someone sent an input
         else if(events[event_idx].events & EPOLLIN) {
-          std::string input = 
-            read_input_from_client(events[event_idx].data.fd);
+          read_input_from_client(events[event_idx].data.fd);
         }
 
         // check if the connection is closing
@@ -206,7 +206,7 @@ namespace chat::server {
   /*
   Function to read the input data sent by the client to the server
   */
-  std::string Server::read_input_from_client(
+  void Server::read_input_from_client(
     int file_descriptor /* the file descriptor to read it from */
   ) {
     std::array<char, BUF_SIZE> read_buffer{};
@@ -226,10 +226,17 @@ namespace chat::server {
               // convert to std::string
       std::cout << "Received: " << input_data << std::endl;
 
+      std::pair<bool, std::string> parsed_data;
+      parsed_data = command::parse_client_command(input_data, file_descriptor);
+
+      if(parsed_data.first == false) {
+        std::cerr << "Invalid command given by the client" << std::endl;
+      }
+
       // write the message back
-      write(file_descriptor, input_data.c_str(), input_data.size());
+      write(file_descriptor, parsed_data.second.c_str(), 
+            parsed_data.second.size());
     }
-    return input_data;
   }
 
   // --------------- PRIVATE FUNCTIONS END HERE ---------------
