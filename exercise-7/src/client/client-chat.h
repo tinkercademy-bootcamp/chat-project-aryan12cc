@@ -1,12 +1,9 @@
 // src/client/client-chat.h
 
-#ifndef __CLIENT_CHAT_H__
-#define __CLIENT_CHAT_H__
+#ifndef CLIENT_CHAT_H_
+#define CLIENT_CHAT_H_
 
-/* standard headers */
-
-/* user-defined headers */
-#include <netinet/in.h> // sockaddr_in struct
+#include <netinet/in.h>
 
 /* namespace for all client related operations */
 namespace chat::client { 

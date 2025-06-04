@@ -1,18 +1,7 @@
 // src/utils.h
 
-// header guard for utils.h. Ensures that the header is included atmost
-// once while compiling
-#ifndef UTILS_H
-#define UTILS_H
-
-/* standard headers */
-#include <concepts> // Functions: stdd::convertible_to
-#include <cstring> // Functions: std::memset
-#include <iostream> // Functions: std::cerr
-#include <string> // Function: std::string
-#include <type_traits> // Functions: std::is_integral_v, std::is_same_v
-
-/* user-defined headers */
+#ifndef UTILS_H_
+#define UTILS_H_
 
 namespace chat {
 

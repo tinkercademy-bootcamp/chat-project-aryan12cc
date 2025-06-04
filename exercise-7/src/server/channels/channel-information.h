@@ -1,15 +1,13 @@
 // src/server/channels/channel-information.h
 
-#ifndef __CHANNEL_INFORMATION_H__
-#define __CHANNEL_INFORMATION_H__
+#ifndef CHANNEL_INFORMATION_H_
+#define CHANNEL_INFORMATION_H_
 
-/* standard headers */
 #include <map>
 #include <set>
 #include <string>
 #include <vector>
 
-/* user-defined headers */
 #include "../../client/client-chat.h"
 
 namespace chat::server {

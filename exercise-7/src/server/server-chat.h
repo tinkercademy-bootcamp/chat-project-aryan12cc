@@ -1,13 +1,11 @@
 // src/server/server-chat.h
 
-#ifndef __SERVER_CHAT_H__
-#define __SERVER_CHAT_H__
+#ifndef SERVER_CHAT_H_
+#define SERVER_CHAT_H_
 
-/* standard headers */
 #include <string>
 #include <map>
 
-/* user-defined headers */
 #include "channels/channel-information.h"
 
 /* namespace for all server related operations */

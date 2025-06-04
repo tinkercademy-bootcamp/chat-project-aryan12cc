@@ -1,13 +1,9 @@
 // src/server/command/command.h
 
-#ifndef __COMMAND_H__
-#define __COMMAND_H__
+#ifndef COMMAND_H_
+#define COMMAND_H_
 
-/* standard headers */
-#include <string> // std::string
-
-/* user-defined headers */
-
+#include <string>
 
 /*
   Command namespace containing all the implementation related to the

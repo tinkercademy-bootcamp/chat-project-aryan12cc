@@ -1,9 +1,9 @@
 // src/network/network.h
 
-#ifndef __NETWORK_H__
-#define __NETWORK_H__
+#ifndef NETWORK_H_
+#define NETWORK_H_
 
-#include <netinet/in.h> // sockaddr_in struct
+#include <netinet/in.h>
 
 namespace chat::net {
 
