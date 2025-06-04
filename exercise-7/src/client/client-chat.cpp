@@ -6,7 +6,6 @@
 #include <unistd.h>
 
 #include "../network/network.h"
-#include "../utils.h"
 #include "client-chat.h"
 
 namespace chat::client {

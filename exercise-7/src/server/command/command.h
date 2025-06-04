@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "../../utils.h"
+
 /*
   Command namespace containing all the implementation related to the
     commands a client can enter. Currently the commands are:

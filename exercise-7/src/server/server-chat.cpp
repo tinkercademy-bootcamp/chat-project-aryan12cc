@@ -9,7 +9,6 @@
 #include <unistd.h>
 
 /* user-defined headers */
-#include "../utils.h"
 #include "../network/network.h"
 #include "channels/channel-information.h"
 #include "command/command.h"

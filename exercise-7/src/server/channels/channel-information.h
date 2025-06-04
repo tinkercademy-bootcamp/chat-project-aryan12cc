@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "../../client/client-chat.h"
+#include "../../utils.h"
 
 namespace chat::server {
 

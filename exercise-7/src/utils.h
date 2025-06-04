@@ -9,6 +9,8 @@
 #include <string>
 #include <type_traits>
 
+#include "spdlog/spdlog.h"
+
 namespace chat {
 
   // Constant buffer size to be used throughout the program to ensure that
@@ -25,8 +27,8 @@ namespace chat {
   //    check_error(positive <= 0, "Positive cannot be non-positive")
   // The error message should be convertible to a string
   template <typename T, typename S> 
-  requires (std::is_integral_v<T> || std::is_same_v<T, bool>) &&
-         std::convertible_to<S, std::string>
+  // requires (std::is_integral_v<T> || std::is_same_v<T, bool>) &&
+  //        std::convertible_to<S, std::string>
   void check_error(
     T failure_condition, /* the failure condition */
     S error_message /* the error message to be printed */
