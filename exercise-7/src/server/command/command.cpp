@@ -1,6 +1,7 @@
 // src/server/command/command.cpp
 
 /* standard headers */
+#include <algorithm>
 #include <iostream> // std::cout, std::endl
 
 /* user-defined headers */
@@ -20,6 +21,7 @@ namespace chat::server::command {
     std::string result = "Results of /help:\n";
     result += "Commands available:\n";
     std::vector<std::string> command_list = {
+      "/create <channel_name>",
       "/help",
       "/join <channel_id>",
       "/leave <channel_id>",
@@ -57,36 +59,6 @@ namespace chat::server::command {
   }
 
   /*
-  A function to read input from the client and parse it
-  for channels / server to act upon
-  Returns: bool, signifying whether the parsing was
-          successful or not
-           std::string, the data that needs to be displayed
-  */
-  std::pair<bool, std::string> parse_client_command(
-    std::string data, /* data sent by the client */
-    int client_file_descriptor /* client id for now */
-  ) {
-    // check if data is empty
-    data = data.substr(0, data.size() - 1); // remove the null character
-    if(data.empty() || data[0] != '/') {
-      return std::make_pair(false, "Error: Invalid command");
-    }
-
-    std::string command = get_command_input(data);
-
-    // calling the corresponding function as the command
-    if(command == "help") {
-      return std::make_pair(true, _execute_help());
-    }
-    if(command == "list") {
-      return std::make_pair(true, _execute_list());
-    }
-
-    return std::make_pair(false, "Error: Invalid command");
-  }
-
-  /*
     This function gets the command part of the input
     The command part is the text just after the starting `/`
   */
@@ -106,6 +78,62 @@ namespace chat::server::command {
       command = data.substr(1, space_pos - 1); // remove the `/`
     }
     return command;
+  }
+
+  /*
+  A function to read input from the client and parse it
+  for channels / server to act upon
+  Returns: bool, signifying whether the parsing was
+          successful or not
+           std::string, the data that needs to be displayed
+  */
+  std::pair<bool, std::string> parse_client_command(
+    std::string data, /* data sent by the client */
+    int client_file_descriptor /* client id for now */
+  ) {
+    // check if data is empty
+    data.pop_back(); // remove '\0'
+    data = trim(data); // remove whitespaces
+    if(data.empty() || data[0] != '/') {
+      return std::make_pair(false, "Error: Invalid command");
+    }
+
+    std::string command = get_command_input(data);
+
+    // calling the corresponding function as the command
+    if(command == "create") {
+
+    }
+    if(command == "help") {
+      return std::make_pair(true, _execute_help());
+    }
+    if(command == "list") {
+      return std::make_pair(true, _execute_list());
+    }
+
+    return std::make_pair(false, "Error: Invalid command");
+  }
+
+  /*
+    Utility function to trim whitespace from beginning and end of a string
+  */
+  std::string trim(
+    std::string data /* string to be trimmed */
+  ) {
+    // If string is empty, return it
+    if(data.empty()) {
+      return data;
+    }
+    
+    auto front = std::find_if_not(data.begin(), 
+                data.end(), ::isspace); // first character that
+                                        // is not a space
+    auto back = std::find_if_not(data.rbegin(), 
+                data.rend(), ::isspace).base();
+                                        // last character that
+                                        // is not a space + 1
+    if (front >= back) return "";
+    return std::string(front, back);
   }
 
 } // chat::server::command
