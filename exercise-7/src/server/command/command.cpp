@@ -83,7 +83,7 @@ namespace chat::server::command {
       return std::make_pair(true, _execute_list());
     }
 
-    return std::make_pair(true, command);
+    return std::make_pair(false, "Error: Invalid command");
   }
 
   /*
