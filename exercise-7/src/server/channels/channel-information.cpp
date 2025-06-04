@@ -28,6 +28,15 @@ namespace chat::server {
   std::string Channel::get_channel_name() {
     return channel_name_;
   }
+
+  bool Channel::remove_member(int client_file_descriptor) {
+    if(channel_members_.find(client_file_descriptor)
+        == channel_members_.end()) {
+          return false;
+    }
+    channel_members_.erase(client_file_descriptor);
+    return true;
+  }
   
   // --------------- PUBLIC FUNCTIONS END HERE ---------------
   // --------------- PRIVATE FUNCTIONS START HERE ---------------

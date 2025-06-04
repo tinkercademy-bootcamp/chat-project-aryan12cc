@@ -68,6 +68,27 @@ namespace chat::server::command {
     return std::make_pair(false, "You are already in the channel");
   }
 
+  std::pair<bool, std::string> _execute_leave(
+    int client_file_descriptor, long long channel_id) {
+    // check if the channel exists
+    auto channel_itr = all_channels.find(channel_id);
+    if(channel_itr == all_channels.end()) {
+      return std::make_pair(false, "Error: Channel with " +
+                                  std::to_string(channel_id) + 
+                                  " doesn't exist");
+    }
+    
+    // channel object
+    Channel &channel_object = channel_itr->second;
+
+    // success
+    if(channel_object.remove_member(client_file_descriptor)) {
+      return std::make_pair(true, "Exited the channel");
+    }
+    // failure (not present in the channel)
+    return std::make_pair(false, "You are not there in the channel");
+  }
+
   std::string _execute_list() {
     std::string result = ""; // stores the output to be printed to the client
     
@@ -168,9 +189,17 @@ namespace chat::server::command {
       // the id of the channel client wants to join
       std::pair<bool, long long> next_parameter = get_next_integer(parameters);
       if(next_parameter.first == false) {
-        return std::make_pair(false, "Error: Channel doesn't exist");
+        return std::make_pair(false, "Error: Channel id should be an integer");
       }
       return _execute_join(client_file_descriptor, next_parameter.second);
+    }
+    if(command == "leave") {
+      // the id of the channel client wants to join
+      std::pair<bool, long long> next_parameter = get_next_integer(parameters);
+      if(next_parameter.first == false) {
+        return std::make_pair(false, "Error: Channel id should be an integer");
+      }
+      return _execute_leave(client_file_descriptor, next_parameter.second);
     }
     if(command == "help") {
       return std::make_pair(true, _execute_help());

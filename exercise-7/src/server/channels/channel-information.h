@@ -23,14 +23,8 @@ namespace chat::server {
   */
   class Channel {
 
-    // public functions and variables, accessible by everyone
     public:
 
-      // member functions
-      
-      /*
-        Paramterized constructor getting the values of the variables
-      */
       Channel(
         int id, /* stores the channel id */
         std::string name /* stores the channel name */
@@ -48,18 +42,18 @@ namespace chat::server {
       */
       std::string get_channel_name();
 
-      // member variables
+      /*
+        Function to remove a member from the channel
+      */
+      bool remove_member(
+        int client_file_descriptor /* member to be removed */
+      );
+
 
       int channel_id; // stores the id of the channel
         // The id is assigned when the and is unique
 
-    // private functions and variables, only accessible by functions and 
-    // variables of the same class
     private:
-
-      // member functions
-
-      // member variables
 
       std::string channel_name_; // stores the name of
         // the channel as given by the user on creation
