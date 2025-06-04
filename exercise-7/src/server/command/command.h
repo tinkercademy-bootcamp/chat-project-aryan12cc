@@ -47,6 +47,27 @@ namespace chat::server::command {
   );
 
   /*
+    This function gets ensures that the next "word" in the string
+    is an integer and returns that
+    Returns: std::pair<bool, long long>
+      - bool to check whether the next "word" is an integer
+      - long long contains the integer
+  */
+  std::pair<bool, long long> get_next_integer(
+    std::string data /* data upon which the checking happens */
+  );
+
+  /*
+    This function gets the remaining text of the string
+    Returns: std::pair<bool, std::string>
+      - bool to check whether the remaining text actually exists
+      - std::string contains the remaining text
+  */
+  std::pair<bool, std::string> get_remaining_string(
+    std::string data /* data upon which the checking happens */
+  );
+
+  /*
   This function takes the input and the client from which it came from
   Returns: A pair of boolean and std::string
     A boolean to check if the input was parsed successfully

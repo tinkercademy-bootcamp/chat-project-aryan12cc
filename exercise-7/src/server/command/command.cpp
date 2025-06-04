@@ -45,8 +45,10 @@ namespace chat::server::command {
     // Add namespace qualifier to all_channels
     for(auto channel_pair : chat::server::all_channels) {
       // Convert int to string with std::to_string
-      result += "Channel id: " + std::to_string(channel_pair.second.channel_id) + "\n";
-      result += "Channel name: " + channel_pair.second.get_channel_name() + "\n";
+      result += "Channel id: " + 
+                std::to_string(channel_pair.second.channel_id) + "\n";
+      result += "Channel name: " + 
+                channel_pair.second.get_channel_name() + "\n";
       result += "\n"; // Add blank line between channels for readability
     }
     
@@ -81,6 +83,52 @@ namespace chat::server::command {
   }
 
   /*
+  A function to get the parameters of the next word (integer)
+  of the command given by the client
+  Returns: The next word, ensuring its an integer (bool takes
+  care of that)
+  */
+  std::pair<bool, long long> get_next_integer(
+    std::string data /* data sent by the client after the command */
+  ) {
+    // timming whitespaces at the beginning and end
+    data = trim(data);
+    if(data.empty()) {
+      return {false, -1};
+    }
+    constexpr long long maximum_parameter_value = 100'000'000'000'000'000LL;
+    // find first position of space
+    size_t space_pos = data.find(' ');
+    if(space_pos == std::string::npos) {
+      space_pos = data.size();
+    }
+    long long parameter_input = 0;
+    for(size_t i = 0; i < space_pos; i++) {
+      if(data[i] < '0' || data[i] > '9') { 
+        // check if the character is a number
+        return std::make_pair(false, -1);
+      }
+      // add the digit to the input
+      parameter_input = (parameter_input * 10) + data[i] - '0';
+      if(parameter_input >= maximum_parameter_value) { // parameter_input
+        parameter_input = maximum_parameter_value;
+      }
+    }
+    return std::make_pair(true, maximum_parameter_value);
+  }
+
+  /*
+  A function to get the remaining text of the string
+  Returns: The remaining text, ensuring its not empty (bool takes
+  care of that)
+  */
+  std::pair<bool, std::string> get_remaining_string(
+    std::string data /* data sent by the client after the command */
+  ) {
+    
+  }
+
+  /*
   A function to read input from the client and parse it
   for channels / server to act upon
   Returns: bool, signifying whether the parsing was
@@ -100,9 +148,13 @@ namespace chat::server::command {
 
     std::string command = get_command_input(data);
 
+    // parameter associated with the command
+    std::string parameters = data.substr(command.size() + 1);
+
     // calling the corresponding function as the command
     if(command == "create") {
-
+      std::pair<bool, std::string> remaining_text = 
+          get_remaining_string(parameters);
     }
     if(command == "help") {
       return std::make_pair(true, _execute_help());
