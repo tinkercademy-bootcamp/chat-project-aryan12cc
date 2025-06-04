@@ -4,8 +4,8 @@
 #define __SERVER_CHAT_H__
 
 /* standard headers */
-#include <string> // std::string
-#include <map> // std::unordered_map
+#include <string>
+#include <map>
 
 /* user-defined headers */
 #include "channels/channel-information.h"
@@ -30,24 +30,15 @@ namespace chat::server {
 
   class Server {
     
-    // public functions and variables, accessible by everyone
     public:
 
-      /* Constructor to initialize member variables */
       Server(
         int port /* the port through which server will listen */
       );
 
-      /* Destructor to ensure cleanup of sockets */
       ~Server() = default;
 
-      // public variables
-    
-    // private functions and variables, only accessible by functions and 
-    // variables of the same class
     private:
-
-      // member functions
 
       /*
       This function accepts an incoming request from the client side to
@@ -102,8 +93,6 @@ namespace chat::server {
         int file_descriptor, /* The file descriptor to write the output to */
         std::string output /* The output the be written */
       );
-
-      // member variables
 
       int epoll_fd_; // file descriptor for epoll used to monitor multiple
                     // sockets

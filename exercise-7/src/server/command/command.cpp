@@ -43,8 +43,7 @@ namespace chat::server::command {
   Returns: Data that is displayed to the client
   */
   std::string _execute_help() {
-    std::string result = "Results of /help:\n";
-    result += "Commands available:\n";
+    std::string result = "Commands available:\n";
     std::vector<std::string> command_list = {
       "/create <channel_name>",
       "/help",
