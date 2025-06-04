@@ -39,6 +39,12 @@ namespace chat::client {
       /* Function to connect the client to the server */
       void connect_to_server();
 
+      /* Function to read message sent from server */
+      void read_from_server();
+
+      /* Function to read input from standard input */
+      void read_from_stdin();
+
       int client_socket_fd_; // file descriptor of the client to connect to
                             // the server
       sockaddr_in server_address_; // sockaddr_in struct to store the details

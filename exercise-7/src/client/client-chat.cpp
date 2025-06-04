@@ -30,9 +30,6 @@ namespace chat::client {
   }
 
   void Client::communication_loop() {
-
-    char buffer[BUF_SIZE];
-
     // create an epoll file descriptor to monitor stdin and
     // server inputs
     int epoll_fd = net::initialize_epoll();
@@ -47,37 +44,10 @@ namespace chat::client {
       
       for(int event_idx = 0; event_idx < num_events; event_idx++) {
         if(events[event_idx].data.fd == client_socket_fd_) { // server
-          clear_buffer(buffer);
-          
-          // read message from server
-          int bytes_read = read(client_socket_fd_, buffer, BUF_SIZE - 1);
-          
-          // there is some message that has come from the server
-          if(bytes_read > 0) {
-            buffer[bytes_read] = '\0';
-            std::cout << buffer << std::endl;
-
-            // print for the next input
-            std::cout << "Give your input here: " << std::endl;
-          }
-          else if(bytes_read == 0) {
-            // Server has closed the connection
-            std::cout << "Server disconnected" << std::endl;
-            return;
-          }
-          else {
-            // Error reading from server
-            std::cerr << "Error reading from server: " << strerror(errno) 
-                        << std::endl;
-          }
+          read_from_server();
         }
         else { // client input
-          std::string input;
-          std::getline(std::cin, input);
-
-          // write to server
-          check_error(write(client_socket_fd_, input.c_str(), input.size() + 1) 
-                    <= 0, "Failed to write from client to server");
+          read_from_stdin();
         }
       }
     }
@@ -89,6 +59,41 @@ namespace chat::client {
     // the program
     check_error(connect(client_socket_fd_, (sockaddr *) &server_address_, 
                   sizeof(server_address_)) < 0, "Connection Failed");
+  }
+
+  void Client::read_from_server() {
+    char buffer[BUF_SIZE];
+    clear_buffer(buffer);
+    // read message from server
+    int bytes_read = read(client_socket_fd_, buffer, BUF_SIZE - 1);
+    
+    // there is some message that has come from the server
+    if(bytes_read > 0) {
+      buffer[bytes_read] = '\0';
+      std::cout << buffer << std::endl;
+
+      // print for the next input
+      std::cout << "Give your input here: " << std::endl;
+    }
+    else if(bytes_read == 0) {
+      // Server has closed the connection
+      std::cout << "Server disconnected" << std::endl;
+      return;
+    }
+    else {
+      // Error reading from server
+      std::cerr << "Error reading from server: " << strerror(errno) 
+                  << std::endl;
+    }
+  }
+
+  void Client::read_from_stdin() {
+    std::string input;
+    std::getline(std::cin, input);
+
+    // write to server
+    check_error(write(client_socket_fd_, input.c_str(), input.size() + 1) 
+              <= 0, "Failed to write from client to server");
   }
 
   // --------------- PRIVATE FUNCTIONS END HERE ---------------
