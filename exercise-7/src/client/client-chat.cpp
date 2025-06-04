@@ -1,10 +1,9 @@
 // src/client/client-chat.cpp
 
-/* standard headers */
-#include <string> // std::string, std::getline
-#include <unistd.h> // read(), write(), close() etc
+#include <iostream>
+#include <string>
+#include <unistd.h>
 
-/* user-defined headers */
 #include "../network/network.h"
 #include "../utils.h"
 #include "client-chat.h"
@@ -12,17 +11,11 @@
 namespace chat::client {
   // --------------- PUBLIC FUNCTIONS START HERE ---------------
 
-  /*
-  Constructor for the class Client(). 
-  Initializes member variables and member functions
-  */
-  Client::Client(
-    int port /* port used to connect the client with the server */
-  ) {
+  Client::Client(int port) {
 
-    client_setup_socket(port); // setup socket for communication
+    client_setup_socket(port);
 
-    connect_to_server(); // connect to the server to send and receive messages
+    connect_to_server();
 
     communication_loop();
   }
@@ -30,20 +23,11 @@ namespace chat::client {
   // --------------- PUBLIC FUNCTIONS END HERE ---------------
   // --------------- PRIVATE FUNCTIONS START HERE ---------------
   
-  /*
-  Function to effectively setup the socket needed to connect
-  to the server
-  */
-  void Client::client_setup_socket(
-    int port /* port used to connect the client with the server */
-  ) {
-    client_socket_fd_ = net::create_socket(); // network/network.h
-    server_address_ = net::create_address(port); // network/network.h
+  void Client::client_setup_socket(int port) {
+    client_socket_fd_ = net::create_socket();
+    server_address_ = net::create_address(port);
   }
 
-  /*
-  Function to communicate with the server endlessly on a loop
-  */
   void Client::communication_loop() {
 
     char buffer[BUF_SIZE];
@@ -62,11 +46,11 @@ namespace chat::client {
       int activity_result = select(max_file_descriptor + 1, 
                             &active_file_descriptors, NULL, NULL, NULL);
       
-      check_error(activity_result < 0, "Error in select() call"); // utils.h
+      check_error(activity_result < 0, "Error in select() call");
       
       // check for activity from server
       if(FD_ISSET(client_socket_fd_, &active_file_descriptors)) {
-        clear_buffer(buffer); // utils.h
+        clear_buffer(buffer);
         
         // read message from server
         int bytes_read = read(client_socket_fd_, buffer, BUF_SIZE - 1);
@@ -95,26 +79,21 @@ namespace chat::client {
       if(FD_ISSET(STDIN_FILENO, &active_file_descriptors)) {
         // read input
         std::string input;
-        std::getline(std::cin, input); // reading entire line
+        std::getline(std::cin, input);
 
         // write to server
         check_error(write(client_socket_fd_, input.c_str(), input.size() + 1) 
                   <= 0, "Failed to write from client to server");
-                  // utils.h
       }
     }
   }
 
-  /*
-  Function to connect the client to the server
-  */
   void Client::connect_to_server() {
     // Trying to connect client socket to the server.
     // On failure, prints "Connection Failed" and terminates
     // the program
     check_error(connect(client_socket_fd_, (sockaddr *) &server_address_, 
                   sizeof(server_address_)) < 0, "Connection Failed");
-                  // utils.h
   }
 
   // --------------- PRIVATE FUNCTIONS END HERE ---------------

@@ -17,22 +17,15 @@ namespace chat::client {
 
   class Client {
     
-    // public functions and variables, accessible by everyone
     public:
 
-      /* Constructor to initialize member variables */
       Client(
         int port /* the port through which client will connect to server */
       );
 
-      /* Destructor to ensure cleanup of variables */
       ~Client() = default;
     
-    // private functions and variables, only accessible by functions and 
-    // variables of the same class
     private:
-
-      // member functions
       
       /* Function to setup the socket of the client 
       to be able to connect to the server */
@@ -46,7 +39,6 @@ namespace chat::client {
       /* Function to connect the client to the server */
       void connect_to_server();
 
-      // member variables
       int client_socket_fd_; // file descriptor of the client to connect to
                             // the server
       sockaddr_in server_address_; // sockaddr_in struct to store the details

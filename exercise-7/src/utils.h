@@ -3,6 +3,12 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
+#include <concepts>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <type_traits>
+
 namespace chat {
 
   // Constant buffer size to be used throughout the program to ensure that
@@ -39,4 +45,4 @@ namespace chat {
 
 } // namespace chat
 
-#endif // UTILS_H
+#endif
