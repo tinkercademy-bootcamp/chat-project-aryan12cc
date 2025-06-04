@@ -12,6 +12,31 @@
 
 namespace chat::server::command {
 
+  /*
+  A function to execute the /help command given by the client
+  Returns: Data that is displayed to the client
+  */
+  std::string _execute_help() {
+    std::string result = "Results of /help:\n";
+    result += "Commands available:\n";
+    std::vector<std::string> command_list = {
+      "/help",
+      "/join <channel_id>",
+      "/leave <channel_id>",
+      "/list",
+      "/message <channel_id> <message>"
+    };
+
+    for(auto &command: command_list) {
+      result += "\t" + command + "\n";
+    }
+    return result;
+  }
+
+  /*
+  A function to execute the /list command given by the client
+  Returns: Data that is displayed to the client
+  */
   std::string _execute_list() {
     std::string result = ""; // stores the output to be printed to the client
     
@@ -51,6 +76,9 @@ namespace chat::server::command {
     std::string command = get_command_input(data);
 
     // calling the corresponding function as the command
+    if(command == "help") {
+      return std::make_pair(true, _execute_help());
+    }
     if(command == "list") {
       return std::make_pair(true, _execute_list());
     }

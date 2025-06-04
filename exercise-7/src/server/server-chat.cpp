@@ -56,7 +56,7 @@ namespace chat::server {
   // --------------- PRIVATE FUNCTIONS START HERE ---------------
 
   // Function to accept an incoming connection request from the client
-  void Server::accept_incoming_request() {
+  int Server::accept_incoming_request() {
     struct sockaddr_in store_client_address; // store client address
                                           // when accept() is called
     socklen_t socket_length = sizeof(store_client_address);
@@ -86,6 +86,7 @@ namespace chat::server {
     net::epoll_ctl_add(epoll_fd_, connection_socket, EPOLLIN | 
         EPOLLHUP | EPOLLRDHUP); 
     // src/network/network.h
+    return connection_socket;
   }
 
   // Function to gracefully close the connection between the server and
@@ -137,11 +138,17 @@ namespace chat::server {
         // incoming connection
         if(events[event_idx].data.fd == listen_socket_fd_) {
           // accept the incoming connection
-          accept_incoming_request();
+          int new_connection_socket = accept_incoming_request();
+          std::string help_result = command::_execute_help();
+            // result of executing /help command
+          std::cout << "help_result = " << help_result << std::endl;
+          write_data_to_client(new_connection_socket, help_result);
+            // writing back the result to the client
         }
         // someone sent an input
         else if(events[event_idx].events & EPOLLIN) {
-          read_input_from_client(events[event_idx].data.fd);
+          parse_input_from_client(events[event_idx].data.fd);
+            // read and parse the input given by the client
         }
 
         // check if the connection is closing
@@ -210,7 +217,7 @@ namespace chat::server {
   /*
   Function to read the input data sent by the client to the server
   */
-  void Server::read_input_from_client(
+  void Server::parse_input_from_client(
     int file_descriptor /* the file descriptor to read it from */
   ) {
     std::array<char, BUF_SIZE> read_buffer{};
@@ -228,7 +235,6 @@ namespace chat::server {
 
       input_data = std::string(read_buffer.data(), bytes_read);
               // convert to std::string
-      std::cout << "Received: " << input_data << std::endl;
 
       std::pair<bool, std::string> parsed_data;
       parsed_data = command::parse_client_command(input_data, file_descriptor);
@@ -238,9 +244,23 @@ namespace chat::server {
       }
 
       // write the message back
-      write(file_descriptor, parsed_data.second.c_str(), 
-            parsed_data.second.size());
+      write_data_to_client(file_descriptor, parsed_data.second);
     }
+  }
+
+  /*
+    A function to write data to a given file descriptor
+  */
+  void Server::write_data_to_client(
+    int file_descriptor, /* the file descriptor to write data */
+    std::string data /* the data to be written */
+  ) {
+    std::cout << "coming to write_data!" << std::endl;
+    std::cout << "data = " << data << 
+      ", data.size() = " << data.size() << std::endl;
+    check_error(write(file_descriptor, data.c_str(), data.size()) 
+      <= 0, "Error while writing");
+    std::cout << "written data!" << std::endl;
   }
 
   // --------------- PRIVATE FUNCTIONS END HERE ---------------

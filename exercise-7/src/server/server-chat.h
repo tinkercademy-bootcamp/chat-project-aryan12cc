@@ -52,8 +52,9 @@ namespace chat::server {
       /*
       This function accepts an incoming request from the client side to
       connect to the server
+      Returns the new connection socket
       */
-      void accept_incoming_request();
+      int accept_incoming_request();
 
       /*
       Close the connection between client and server gracefully after the
@@ -87,10 +88,19 @@ namespace chat::server {
       void initialize_epoll();
 
       /*
-      Function to read input data sent from the client to the server
+      Function to read and parse the input data sent 
+        from the client to the server
       */
-      void read_input_from_client(
+      void parse_input_from_client(
         int file_descriptor /* The file descriptor to read the input from */
+      );
+
+      /*
+      Function to write output data from the server to a specific client
+      */
+      void write_data_to_client(
+        int file_descriptor, /* The file descriptor to write the output to */
+        std::string output /* The output the be written */
       );
 
       // member variables

@@ -60,9 +60,6 @@ namespace chat::client {
 
     int max_file_descriptor = std::max(client_socket_fd_, STDIN_FILENO);
 
-    // get input from the client
-    std::cout << "Give your input here: " << std::endl;
-
     while(true) {
       // clear file descriptor set and only add the two file descriptors
       FD_ZERO(&active_file_descriptors);
@@ -85,7 +82,7 @@ namespace chat::client {
         // there is some message that has come from the server
         if(bytes_read > 0) {
           buffer[bytes_read] = '\0';
-          std::cout << "From server: " << buffer << std::endl;
+          std::cout << buffer << std::endl;
 
           // print for the next input
           std::cout << "Give your input here: " << std::endl;

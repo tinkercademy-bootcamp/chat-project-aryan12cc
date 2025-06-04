@@ -12,15 +12,22 @@
 /*
   Command namespace containing all the implementation related to the
     commands a client can enter. Currently the commands are:
-  1. /leave <channel_id> -- client leaves the channel with channel_id
+  1. /help -- shows the entire list of commands
   2. /join <channel_id> -- client joins the channel with channel_id
-  3. /list -- lists all channels according to their id
-  4. /message <channel_id> <message> -- client sends message 
+  3. /leave <channel_id> -- client leaves the channel with channel_id
+  4. /list -- lists all channels according to their id
+  5. /message <channel_id> <message> -- client sends message 
                                         to channel with channel_id
 */
 
 namespace chat::server::command {
   // all command executing functions start with _execute
+
+  /*
+  This function executes the help command given by the client
+  Return: Data in a formatted order
+  */
+  std::string _execute_help();
 
   /*
   This function executes the list command given by the client
