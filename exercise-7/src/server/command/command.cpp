@@ -61,6 +61,35 @@ namespace chat::server::command {
   }
 
   /*
+  A function to allow a client to join a specific channel
+  Returns: pair of bool and data to be displayed to the client
+    bool signifies whether the client could join the channel
+  */
+  std::pair<bool, std::string> _execute_join(
+    int client_file_descriptor, /* client that wants to join */
+    long long channel_id /* id of the channel client is requesting to join */
+  ) {
+    // check if the channel exists
+    auto channel_itr = all_channels.find(channel_id);
+    if(channel_itr == all_channels.end()) {
+      return std::make_pair(false, "Error: Channel with " +
+                                  std::to_string(channel_id) + 
+                                  " doesn't exist");
+    }
+    
+    // channel object
+    Channel &channel_object = channel_itr->second;
+
+    // success
+    if(channel_object.add_member(client_file_descriptor)) {
+      return std::make_pair(true, "Joined the channel");
+    }
+    // failure (already in the channel)
+    return std::make_pair(false, "You are already in the channel");
+  }
+
+
+  /*
   A function to execute the /list command given by the client
   Returns: Data that is displayed to the client
   */
@@ -139,7 +168,7 @@ namespace chat::server::command {
         parameter_input = maximum_parameter_value;
       }
     }
-    return std::make_pair(true, maximum_parameter_value);
+    return std::make_pair(true, parameter_input);
   }
 
   /*
@@ -189,6 +218,14 @@ namespace chat::server::command {
         return std::make_pair(false, "Error: Channel name cannot be empty");
       }
       return _execute_create(remaining_text.second);
+    }
+    if(command == "join") {
+      // the id of the channel client wants to join
+      std::pair<bool, long long> next_parameter = get_next_integer(parameters);
+      if(next_parameter.first == false) {
+        return std::make_pair(false, "Error: Channel doesn't exist");
+      }
+      return _execute_join(client_file_descriptor, next_parameter.second);
     }
     if(command == "help") {
       return std::make_pair(true, _execute_help());

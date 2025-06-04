@@ -4,8 +4,10 @@
 #define __CHANNEL_INFORMATION_H__
 
 /* standard headers */
-#include <string> // std::string
-#include <vector> // std::vector
+#include <map>
+#include <set>
+#include <string>
+#include <vector>
 
 /* user-defined headers */
 #include "../../client/client-chat.h"
@@ -32,8 +34,15 @@ namespace chat::server {
         Paramterized constructor getting the values of the variables
       */
       Channel(
-        int id, /* stores the channel id*/
+        int id, /* stores the channel id */
         std::string name /* stores the channel name */
+      );
+
+      /*
+        Function to add a member (client) to the channel
+      */
+      bool add_member(
+        int client_file_descriptor /* the member that wants to join */
       );
 
       /*
@@ -56,9 +65,9 @@ namespace chat::server {
 
       std::string channel_name_; // stores the name of
         // the channel as given by the user on creation
-      std::vector<client::Client> channel_members_; // list of all clients
+      std::set<int> channel_members_; // list of all clients
         // that are the members of the channel
-      std::vector<client::Client> channel_admins_; // list of all clients
+      std::set<int> channel_admins_; // list of all clients
         // that are the admins of the channel
   };
       

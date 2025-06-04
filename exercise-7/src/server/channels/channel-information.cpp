@@ -23,6 +23,21 @@ namespace chat::server {
   }
 
   /*
+  This function adds a member to the channel if the member is not present
+  */
+  bool Channel::add_member(
+    int client_file_descriptor /* file descriptor fo the client who wants
+                                  to join the channel */
+  ) {
+    if(channel_members_.find(client_file_descriptor)
+        != channel_members_.end()) {
+          return false;
+    }
+    channel_members_.insert(client_file_descriptor);
+    return true;
+  }
+
+  /*
   This function returns the channel_name value stored in the object
   */
   std::string Channel::get_channel_name() {

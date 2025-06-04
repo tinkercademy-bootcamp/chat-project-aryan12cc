@@ -1,15 +1,17 @@
 // src/server/server-chat.cpp
 
 /* standard headers */
-#include <arpa/inet.h> // sockaddr_in struct, inet_ntop(), htons()
-#include <array> // std::array
-#include <fcntl.h> // fcntl, O_NONBLOCK
-#include <sys/epoll.h> // epoll_create1, epoll_wait, epoll_event
-#include <unistd.h> // close, read, write, accept
+#include <arpa/inet.h>
+#include <array>
+#include <fcntl.h>
+#include <map>
+#include <sys/epoll.h>
+#include <unistd.h>
 
 /* user-defined headers */
 #include "../utils.h"
 #include "../network/network.h"
+#include "channels/channel-information.h"
 #include "command/command.h"
 #include "server-chat.h"
 

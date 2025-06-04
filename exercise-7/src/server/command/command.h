@@ -39,6 +39,16 @@ namespace chat::server::command {
   std::string _execute_help();
 
   /*
+  This function executes the join command given by the client
+  Returns: pair of bool and data to be displayed to the client
+    bool signifies whether the client could join the channel
+  */
+  std::pair<bool, std::string> _execute_join(
+    int client_file_descriptor, /* client that wants to join */
+    long long channel_id /* id of the channel client is requesting to join */
+  );
+
+  /*
   This function executes the list command given by the client
   Return: Data in a formatted order
   */
