@@ -14,6 +14,31 @@
 namespace chat::server::command {
 
   /*
+  A function to execute the /create command given by the client
+  Returns: Data confirming that the channel has been created or not
+  */
+  std::pair<bool, std::string> _execute_create(
+    std::string channel_name /* name of the channel that 
+                                needs to be created */
+  ) {
+    // get the new id of the channel (default = 1)
+    int new_id = 1;
+    if(!chat::server::all_channels.empty()) {
+      int maximum_id = chat::server::all_channels.rbegin()->first;
+          // get the last entry in the map (sorted by keys = id)
+      new_id = maximum_id + 1;
+    }
+
+    // insert the new channel into the all_channels map
+    chat::server::all_channels.insert({new_id, 
+            chat::server::Channel(new_id, channel_name)});
+    
+    // return a confirmation message
+    return std::make_pair(true, "Channel `" + channel_name + 
+            "` created with id = " + std::to_string(new_id));
+  }
+
+  /*
   A function to execute the /help command given by the client
   Returns: Data that is displayed to the client
   */
@@ -160,6 +185,10 @@ namespace chat::server::command {
     if(command == "create") {
       std::pair<bool, std::string> remaining_text = 
           get_remaining_string(parameters);
+      if(remaining_text.first == false) {
+        return std::make_pair(false, "Error: Channel name cannot be empty");
+      }
+      return _execute_create(remaining_text.second);
     }
     if(command == "help") {
       return std::make_pair(true, _execute_help());

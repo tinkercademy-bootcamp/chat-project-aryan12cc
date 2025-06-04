@@ -25,6 +25,14 @@ namespace chat::server::command {
   // all command executing functions start with _execute
 
   /*
+  This function executes the create command given by the client
+  Return: boolean to check whether the channel has been created.
+          std::string for data in a formatted order
+  */
+  std::pair<bool, std::string> _execute_create(
+    std::string channel_name /* name of the channel */
+  );
+  /*
   This function executes the help command given by the client
   Return: Data in a formatted order
   */
