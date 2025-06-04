@@ -13,23 +13,23 @@
 namespace chat::server::command {
 
   std::string _execute_list() {
-  std::string result = ""; // stores the output to be printed to the client
-  
-  // Add namespace qualifier to all_channels
-  for(auto channel_pair : chat::server::all_channels) {
-    // Convert int to string with std::to_string
-    result += "Channel id: " + std::to_string(channel_pair.second.channel_id) + "\n";
-    result += "Channel name: " + channel_pair.second.get_channel_name() + "\n";
-    result += "\n"; // Add blank line between channels for readability
+    std::string result = ""; // stores the output to be printed to the client
+    
+    // Add namespace qualifier to all_channels
+    for(auto channel_pair : chat::server::all_channels) {
+      // Convert int to string with std::to_string
+      result += "Channel id: " + std::to_string(channel_pair.second.channel_id) + "\n";
+      result += "Channel name: " + channel_pair.second.get_channel_name() + "\n";
+      result += "\n"; // Add blank line between channels for readability
+    }
+    
+    // Return a helpful message if no channels exist
+    if (result.empty()) {
+      return "No channels available.";
+    }
+    
+    return result;
   }
-  
-  // Return a helpful message if no channels exist
-  if (result.empty()) {
-    return "No channels available.";
-  }
-  
-  return result;
-}
 
   /*
   A function to read input from the client and parse it

@@ -18,6 +18,8 @@ namespace chat::server {
   ) {
     channel_id = id;
     channel_name_ = name;
+    channel_members_ = {};
+    channel_admins_ = {};
   }
 
   /*

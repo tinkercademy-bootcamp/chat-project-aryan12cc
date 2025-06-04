@@ -15,7 +15,8 @@
 
 namespace chat::server {
 
-  std::map<int, Channel> all_channels; // defining all_channels
+  std::map<int, Channel> all_channels; // maps channel_id with the
+                                       // corresponding channel object
 
   // --------------- PUBLIC FUNCTIONS START HERE ---------------
 
