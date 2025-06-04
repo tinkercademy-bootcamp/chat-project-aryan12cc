@@ -46,16 +46,15 @@ namespace chat::server {
     socklen_t socket_length = sizeof(store_client_address);
                                         // size of sockaddr_in struct
 
-    char ip_buffer[BUF_SIZE];
     int connection_socket = accept(listen_socket_fd_, 
       (struct sockaddr*) &store_client_address, &socket_length);
 
     // convert client ip to a string
-    clear_buffer(ip_buffer);
-    inet_ntop(AF_INET, (char*) &store_client_address.sin_addr, ip_buffer,
+    clear_buffer(buffer);
+    inet_ntop(AF_INET, (char*) &store_client_address.sin_addr, buffer,
       sizeof(store_client_address));
 
-    std::cout << "Connected with client at address " << ip_buffer << ":" 
+    std::cout << "Connected with client at address " << buffer << ":" 
       << ntohs(store_client_address.sin_port) << std::endl;
 
     // set the client socket to non blocking mode using O_NONBLOCK
@@ -164,12 +163,11 @@ namespace chat::server {
   }
 
   void Server::parse_input_from_client(int file_descriptor) {
-    std::array<char, BUF_SIZE> read_buffer{};
     std::string input_data; // to store the input data
     while(true) {
       // read the message
-      int bytes_read = read(file_descriptor, read_buffer.data(),
-                              read_buffer.size());
+      int bytes_read = read(file_descriptor, buffer,
+                              BUF_SIZE);
       // Check for end of data or error
       if(bytes_read == 0) {
         // Connection closed by client
@@ -184,9 +182,9 @@ namespace chat::server {
         break;
       }
 
-      read_buffer[bytes_read] = '\0'; // null terminate
+      buffer[bytes_read] = '\0'; // null terminate
 
-      input_data = std::string(read_buffer.data(), bytes_read);
+      input_data = std::string(buffer, bytes_read);
               // convert to std::string
 
       std::pair<bool, std::string> parsed_data;

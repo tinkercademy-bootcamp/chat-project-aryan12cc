@@ -62,7 +62,6 @@ namespace chat::client {
   }
 
   void Client::read_from_server() {
-    char buffer[BUF_SIZE];
     clear_buffer(buffer);
     // read message from server
     int bytes_read = read(client_socket_fd_, buffer, BUF_SIZE - 1);

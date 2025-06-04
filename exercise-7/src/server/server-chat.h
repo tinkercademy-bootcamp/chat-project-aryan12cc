@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 
+#include "../utils.h"
 #include "channels/channel-information.h"
 
 /* namespace for all server related operations */
@@ -85,6 +86,7 @@ namespace chat::server {
         std::string output /* The output the be written */
       );
 
+      char buffer[BUF_SIZE]; // buffer for interactions with the client
       int epoll_fd_; // file descriptor for epoll used to monitor multiple
                     // sockets
 
