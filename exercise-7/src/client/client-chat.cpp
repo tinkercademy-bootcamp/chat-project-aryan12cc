@@ -27,14 +27,6 @@ namespace chat::client {
     communication_loop();
   }
 
-  /*
-  Destructor for the class Client().
-  Ensures resource cleanup of member functions and variables
-  */
-  Client::~Client() {
-
-  }
-
   // --------------- PUBLIC FUNCTIONS END HERE ---------------
   // --------------- PRIVATE FUNCTIONS START HERE ---------------
   

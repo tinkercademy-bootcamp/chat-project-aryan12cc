@@ -43,17 +43,6 @@ namespace chat::server {
     return;
   }
 
-  /*
-  Destructor for the class Server()
-  Ensures resource cleanup of member functions and variables
-  */
-  Server::~Server() {
-
-    close(epoll_fd_);
-    close(listen_socket_fd_);
-    return;
-  }
-
   // --------------- PUBLIC FUNCTIONS END HERE ---------------
   // --------------- PRIVATE FUNCTIONS START HERE ---------------
 

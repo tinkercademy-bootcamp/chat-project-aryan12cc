@@ -39,7 +39,7 @@ namespace chat::server {
       );
 
       /* Destructor to ensure cleanup of sockets */
-      ~Server();
+      ~Server() = default;
 
       // public variables
     

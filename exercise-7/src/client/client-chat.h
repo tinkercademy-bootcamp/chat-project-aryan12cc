@@ -29,7 +29,7 @@ namespace chat::client {
       );
 
       /* Destructor to ensure cleanup of variables */
-      ~Client();
+      ~Client() = default;
     
     // private functions and variables, only accessible by functions and 
     // variables of the same class
