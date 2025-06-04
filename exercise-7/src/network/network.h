@@ -29,6 +29,12 @@ namespace chat::net {
     int monitor_file_descriptor, /* File descriptor to be monitored */
     int events /* Events for which the file descriptor is monitored */
   );
+
+  /*
+  Function to initialize epoll file descriptors to use other file descriptors
+  Returns: epoll file descriptor
+  */
+  int initialize_epoll();
 }
 
 #endif

@@ -58,4 +58,10 @@ namespace chat::net {
                         "Epoll ctl() failed"); // utils.h
     
   }
+
+  int initialize_epoll() {
+      // Create an epoll instance. epoll_fd_ stores the file descriptor
+      int epoll_fd = epoll_create1(0);
+      return epoll_fd;
+  }
 }

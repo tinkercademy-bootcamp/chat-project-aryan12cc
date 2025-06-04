@@ -28,7 +28,8 @@ namespace chat::server {
     create_server_socket(port);
 
     // Initialize epoll manager for event monitoring of sockets
-    initialize_epoll();
+    epoll_fd_ = net::initialize_epoll();
+    net::epoll_ctl_add(epoll_fd_, listen_socket_fd_, EPOLLIN);
 
     // Loop to communicate with the clients
     communication_loop();
@@ -159,17 +160,6 @@ namespace chat::server {
     // Print a message to denote server has started listening
     std::cout << "Server has started listening on port " << port << std::endl;
     
-    return;
-  }
-
-  void Server::initialize_epoll() {
-    // Create an epoll instance. epoll_fd_ stores the file descriptor
-    epoll_fd_ = epoll_create1(0);
-
-    // make the epoll instance monitor the file descriptor listening
-    // for incoming connections for any input
-    net::epoll_ctl_add(epoll_fd_, listen_socket_fd_, EPOLLIN);
-
     return;
   }
 

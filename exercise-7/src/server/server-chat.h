@@ -70,13 +70,6 @@ namespace chat::server {
       );
 
       /*
-      The function is used when the server is ready to accept connections
-      from clients. It initializes the epoll file descriptors to hear
-      from other file descriptors.
-      */
-      void initialize_epoll();
-
-      /*
       Function to read and parse the input data sent 
         from the client to the server
       */
