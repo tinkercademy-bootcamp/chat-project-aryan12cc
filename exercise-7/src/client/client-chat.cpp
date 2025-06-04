@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <sys/epoll.h>
 #include <unistd.h>
 
 #include "../network/network.h"
@@ -31,59 +32,53 @@ namespace chat::client {
   void Client::communication_loop() {
 
     char buffer[BUF_SIZE];
-    fd_set active_file_descriptors; // file descriptor set for
-                                // monitoring readable file descriptors
 
-    int max_file_descriptor = std::max(client_socket_fd_, STDIN_FILENO);
+    // create an epoll file descriptor to monitor stdin and
+    // server inputs
+    int epoll_fd = net::initialize_epoll();
+    net::epoll_ctl_add(epoll_fd, client_socket_fd_, EPOLLIN);
+    net::epoll_ctl_add(epoll_fd, STDIN_FILENO, EPOLLIN);
 
+    constexpr int MAX_EVENTS = 10; // max events to process at one go
+    struct epoll_event events[MAX_EVENTS]; // stores all events after the
+                                  // last time it was checked
     while(true) {
-      // clear file descriptor set and only add the two file descriptors
-      FD_ZERO(&active_file_descriptors);
-      FD_SET(client_socket_fd_, &active_file_descriptors);
-      FD_SET(STDIN_FILENO, &active_file_descriptors);
-
-      // wait for activity on any of the file descriptors
-      int activity_result = select(max_file_descriptor + 1, 
-                            &active_file_descriptors, NULL, NULL, NULL);
+      int num_events = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
       
-      check_error(activity_result < 0, "Error in select() call");
-      
-      // check for activity from server
-      if(FD_ISSET(client_socket_fd_, &active_file_descriptors)) {
-        clear_buffer(buffer);
-        
-        // read message from server
-        int bytes_read = read(client_socket_fd_, buffer, BUF_SIZE - 1);
-        
-        // there is some message that has come from the server
-        if(bytes_read > 0) {
-          buffer[bytes_read] = '\0';
-          std::cout << buffer << std::endl;
+      for(int event_idx = 0; event_idx < num_events; event_idx++) {
+        if(events[event_idx].data.fd == client_socket_fd_) { // server
+          clear_buffer(buffer);
+          
+          // read message from server
+          int bytes_read = read(client_socket_fd_, buffer, BUF_SIZE - 1);
+          
+          // there is some message that has come from the server
+          if(bytes_read > 0) {
+            buffer[bytes_read] = '\0';
+            std::cout << buffer << std::endl;
 
-          // print for the next input
-          std::cout << "Give your input here: " << std::endl;
+            // print for the next input
+            std::cout << "Give your input here: " << std::endl;
+          }
+          else if(bytes_read == 0) {
+            // Server has closed the connection
+            std::cout << "Server disconnected" << std::endl;
+            return;
+          }
+          else {
+            // Error reading from server
+            std::cerr << "Error reading from server: " << strerror(errno) 
+                        << std::endl;
+          }
         }
-        else if(bytes_read == 0) {
-          // Server has closed the connection
-          std::cout << "Server disconnected" << std::endl;
-          break;
-        }
-        else {
-          // Error reading from server
-          std::cerr << "Error reading from server: " << strerror(errno) << std::endl;
-          break;
-        }
-      }
-      
-      // check for activity from user
-      if(FD_ISSET(STDIN_FILENO, &active_file_descriptors)) {
-        // read input
-        std::string input;
-        std::getline(std::cin, input);
+        else { // client input
+          std::string input;
+          std::getline(std::cin, input);
 
-        // write to server
-        check_error(write(client_socket_fd_, input.c_str(), input.size() + 1) 
-                  <= 0, "Failed to write from client to server");
+          // write to server
+          check_error(write(client_socket_fd_, input.c_str(), input.size() + 1) 
+                    <= 0, "Failed to write from client to server");
+        }
       }
     }
   }

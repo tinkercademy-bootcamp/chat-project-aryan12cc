@@ -1,14 +1,12 @@
 // src/network/network.cpp
 
-/* standard headers */
-#include <sys/epoll.h> // struct epoll_event, epoll_ctl
+#include <sys/epoll.h>
 
-/* user-defined headers */
 #include "network.h"
 #include "../utils.h"
 
 namespace chat::net {
-  
+
   int create_socket() {
     int sock_fd = socket(AF_INET, SOCK_STREAM, 0);
     check_error(sock_fd < 0, "Socket creation error\n"); // utils.h
