@@ -141,7 +141,6 @@ namespace chat::server {
           int new_connection_socket = accept_incoming_request();
           std::string help_result = command::_execute_help();
             // result of executing /help command
-          std::cout << "help_result = " << help_result << std::endl;
           write_data_to_client(new_connection_socket, help_result);
             // writing back the result to the client
         }
@@ -255,12 +254,8 @@ namespace chat::server {
     int file_descriptor, /* the file descriptor to write data */
     std::string data /* the data to be written */
   ) {
-    std::cout << "coming to write_data!" << std::endl;
-    std::cout << "data = " << data << 
-      ", data.size() = " << data.size() << std::endl;
     check_error(write(file_descriptor, data.c_str(), data.size()) 
       <= 0, "Error while writing");
-    std::cout << "written data!" << std::endl;
   }
 
   // --------------- PRIVATE FUNCTIONS END HERE ---------------
