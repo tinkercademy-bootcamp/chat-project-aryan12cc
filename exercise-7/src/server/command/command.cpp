@@ -94,7 +94,7 @@ namespace chat::server::command {
     // timming whitespaces at the beginning and end
     data = trim(data);
     if(data.empty()) {
-      return {false, -1};
+      return std::make_pair(false, -1);
     }
     constexpr long long maximum_parameter_value = 100'000'000'000'000'000LL;
     // find first position of space
@@ -125,7 +125,12 @@ namespace chat::server::command {
   std::pair<bool, std::string> get_remaining_string(
     std::string data /* data sent by the client after the command */
   ) {
-    
+    // timming whitespaces at the beginning and end
+    data = trim(data);
+    if(data.empty()) {
+      return std::make_pair(false, "");
+    }
+    return std::make_pair(true, data);
   }
 
   /*
