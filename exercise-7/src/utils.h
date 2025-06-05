@@ -35,7 +35,7 @@ namespace chat {
     S error_message /* the error message to be printed */
   ) {
     if(failure_condition) {
-      std::cerr << error_message << "\n";
+      spdlog::error("{}", error_message);
       exit(EXIT_FAILURE);
     }
   }

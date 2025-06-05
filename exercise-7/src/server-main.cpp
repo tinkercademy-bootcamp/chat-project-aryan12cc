@@ -8,7 +8,9 @@
 const int LISTENING_PORT = 8080;
 
 int main() {
-  auto new_logger = spdlog::basic_logger_mt("new_default_logger", "logs/server-log.txt", true);
+  auto new_logger = spdlog::basic_logger_mt("server-logs", "logs/server-log.log", true);
   spdlog::set_default_logger(new_logger);
+  spdlog::set_level(spdlog::level::debug);
+  spdlog::flush_on(spdlog::level::info);
   chat::server::Server chat_server(LISTENING_PORT); 
 }

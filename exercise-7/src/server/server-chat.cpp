@@ -52,9 +52,9 @@ namespace chat::server {
     clear_buffer(buffer);
     inet_ntop(AF_INET, (char*) &store_client_address.sin_addr, buffer,
       sizeof(store_client_address));
-
-    std::cout << "Connected with client at address " << buffer << ":" 
-      << ntohs(store_client_address.sin_port) << std::endl;
+    
+    spdlog::info("Connected with client at address {0}:{1}", buffer,
+      ntohs(store_client_address.sin_port));
 
     // set the client socket to non blocking mode using O_NONBLOCK
     check_error(fcntl(connection_socket, F_SETFL, 
@@ -89,7 +89,7 @@ namespace chat::server {
                     std::to_string(ntohs(store_client_address.sin_port));
     }
     
-    std::cout << "Connection closed with client " << client_info << std::endl;
+    spdlog::info("Connection closed with client {}", client_info);
     
     // Clean up resources
     close(file_descriptor);
@@ -156,6 +156,8 @@ namespace chat::server {
     check_error(listen(listen_socket_fd_, 10) < 0, "Listen failed");
     
     // Print a message to denote server has started listening
+
+    spdlog::info("Server has started listening on port {}", port);
     std::cout << "Server has started listening on port " << port << std::endl;
     
     return;
@@ -175,8 +177,7 @@ namespace chat::server {
       else if(bytes_read < 0) {
         // Error occurred or would block (non-blocking socket)
         if(errno != EAGAIN && errno != EWOULDBLOCK) {
-          std::cerr << "Error reading from client: " 
-            << strerror(errno) << std::endl;
+          spdlog::error("Error reading from client: {}", strerror(errno));
         }
         break;
       }
@@ -190,7 +191,7 @@ namespace chat::server {
       parsed_data = command::parse_client_command(input_data, file_descriptor);
 
       if(parsed_data.first == false) {
-        std::cerr << "Invalid command given by the client" << std::endl;
+        spdlog::warn("{}", parsed_data.second);
       }
 
       // write the message back
