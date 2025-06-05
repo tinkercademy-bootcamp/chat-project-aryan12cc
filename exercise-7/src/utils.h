@@ -9,6 +9,7 @@
 #include <string>
 #include <type_traits>
 
+#include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
 
 namespace chat {

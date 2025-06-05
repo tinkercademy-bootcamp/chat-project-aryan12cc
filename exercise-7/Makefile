@@ -20,6 +20,7 @@ LDFLAGS += $(LIB_FLAGS)
 
 BUILD_DIR := build
 SRC_DIR := src
+LOG_DIR := logs
 
 # Find all the C and C++ files we want to compile
 # Note the single quotes around the * expressions. The shell will incorrectly expand these otherwise, but we want to send the * directly to the find command.
@@ -46,6 +47,7 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 CPPFLAGS := $(INC_FLAGS) -MMD -MP
 
 all: $(BUILD_DIR)/server $(BUILD_DIR)/client
+	mkdir -p $(LOG_DIR)
 	
 $(BUILD_DIR)/server: $(BUILD_DIR)/src/server-main.cpp.o $(NON_MAIN_OBJS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(BUILD_DIR)/src/server-main.cpp.o $(NON_MAIN_OBJS) -o $(BUILD_DIR)/server $(LDFLAGS)
@@ -68,6 +70,7 @@ print-vars:
 .PHONY: clean
 clean:
 	rm -r $(BUILD_DIR)
+	rm -r $(LOG_DIR)
 
 # Include the .d makefiles. The - at the front suppresses the errors of missing
 # Makefiles. Initially, all the .d files will be missing, and we don't want those
