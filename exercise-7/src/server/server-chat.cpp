@@ -112,7 +112,7 @@ namespace chat::server {
         if(events[event_idx].data.fd == listen_socket_fd_) {
           // accept the incoming connection
           int new_connection_socket = accept_incoming_request();
-          std::string help_result = command::_execute_help();
+          std::string help_result = command::_execute_help(new_connection_socket);
             // result of executing /help command
           write_data_to_client(new_connection_socket, help_result);
             // writing back the result to the client
@@ -189,10 +189,6 @@ namespace chat::server {
 
       std::pair<bool, std::string> parsed_data;
       parsed_data = command::parse_client_command(input_data, file_descriptor);
-
-      if(parsed_data.first == false) {
-        spdlog::warn("{}", parsed_data.second);
-      }
 
       // write the message back
       write_data_to_client(file_descriptor, parsed_data.second);

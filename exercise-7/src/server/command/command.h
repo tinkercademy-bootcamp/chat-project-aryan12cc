@@ -21,36 +21,48 @@
 
 namespace chat::server::command {
   // all command executing functions start with _execute
+  // _execute_xyz means that some client asked to perform xyz command
 
   /*
-  This function executes the create command given by the client
   Return: boolean to check whether the channel has been created.
           std::string for data in a formatted order
   */
   std::pair<bool, std::string> _execute_create(
-    std::string channel_name /* name of the channel */
+    std::string channel_name, /* name of the channel */
+    int client_file_descriptor /* client that asked this request */
   );
   /*
-  This function executes the help command given by the client
   Return: Data in a formatted order
   */
-  std::string _execute_help();
+  std::string _execute_help(
+    int client_file_descriptor /* client that asked this request */
+  );
 
   /*
-  This function executes the join command given by the client
   Returns: pair of bool and data to be displayed to the client
     bool signifies whether the client could join the channel
   */
   std::pair<bool, std::string> _execute_join(
-    int client_file_descriptor, /* client that wants to join */
+    int client_file_descriptor, /* client that asked this request */
     long long channel_id /* id of the channel client is requesting to join */
+  );
+
+  /*
+  Returns: pair of bool and data to be displayed to the client
+    bool signifies whether the client could leave the channel
+  */
+  std::pair<bool, std::string> _execute_leave(
+    int client_file_descriptor, /* client that asked this request */
+    long long channel_id /* id of the channel client wants to leave */
   );
 
   /*
   This function executes the list command given by the client
   Return: Data in a formatted order
   */
-  std::string _execute_list();
+  std::string _execute_list(
+    int client_file_descriptor /* client that asked this request */
+  );
 
   /*
     This function gets the command part of the input.
