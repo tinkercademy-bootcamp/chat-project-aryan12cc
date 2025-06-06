@@ -12,7 +12,7 @@
 
 namespace chat::server::command {
 
-  std::pair<bool, std::string> _execute_create(
+  std::string _execute_create(
     std::string channel_name, int client_file_descriptor) {
     // get the new id of the channel (default = 1)
     int new_id = 1;
@@ -29,8 +29,10 @@ namespace chat::server::command {
     // return a confirmation message
     spdlog::info("/create by user{}: Channel `{}` created with id = {}", \
       client_file_descriptor, channel_name, new_id);
-    return std::make_pair(true, "Channel `" + channel_name + 
-            "` created with id = " + std::to_string(new_id));
+
+    std::string result = "Channel `" + channel_name + 
+                        "` created with id = " + std::to_string(new_id);
+    return result;
   }
 
   std::string _execute_help(int client_file_descriptor) {
@@ -53,16 +55,19 @@ namespace chat::server::command {
     return result;
   }
 
-  std::pair<bool, std::string> _execute_join(
+  std::string _execute_join(
     int client_file_descriptor, long long channel_id) {
     // check if the channel exists
     auto channel_itr = all_channels.find(channel_id);
+
+    std::string result{};
+
     if(channel_itr == all_channels.end()) {
       spdlog::warn("/join by user{}: Channel {} doesn't exist", \
         client_file_descriptor, channel_id);
-      return std::make_pair(false, "Error: Channel with " +
-                                  std::to_string(channel_id) + 
-                                  " doesn't exist");
+      result = "Error: Channel with " + 
+              std::to_string(channel_id) + " doesn't exist";
+      return result;
     }
     
     // channel object
@@ -72,24 +77,27 @@ namespace chat::server::command {
     if(channel_object.add_member(client_file_descriptor)) {
       spdlog::info("/join by user{}: Channel {} successfully joined", \
         client_file_descriptor, channel_id);
-      return std::make_pair(true, "Joined the channel");
+      result = "Joined the channel";
+      return result;
     }
     // failure (already in the channel)
     spdlog::warn("/join by user{}: User already present in channel {}", \
       client_file_descriptor, channel_id);
-    return std::make_pair(false, "You are already in the channel");
+    result = "You are already in the channel";
+    return result;
   }
 
-  std::pair<bool, std::string> _execute_leave(
+  std::string _execute_leave(
     int client_file_descriptor, long long channel_id) {
     // check if the channel exists
     auto channel_itr = all_channels.find(channel_id);
+    std::string result{};
     if(channel_itr == all_channels.end()) {
       spdlog::warn("/leave by user{}: Channel {} doesn't exist", \
         client_file_descriptor, channel_id);
-      return std::make_pair(false, "Error: Channel with " +
-                                  std::to_string(channel_id) + 
-                                  " doesn't exist");
+      result = "Error: Channel with " + std::to_string(channel_id) + 
+              " doesn't exist";
+      return result;
     }
     
     // channel object
@@ -99,16 +107,18 @@ namespace chat::server::command {
     if(channel_object.remove_member(client_file_descriptor)) {
       spdlog::info("/leave by user{}: Channel {} successfully left", \
         client_file_descriptor, channel_id);
-      return std::make_pair(true, "Exited the channel");
+      result = "Exited the channel";
+      return result;
     }
     // failure (not present in the channel)
     spdlog::warn("/leave by user{}: User not present in channel {}", \
       client_file_descriptor, channel_id);
-    return std::make_pair(false, "You are not there in the channel");
+    result = "You are not there in the channel";
+    return result;
   }
 
   std::string _execute_list(int client_file_descriptor) {
-    std::string result = ""; // stores the output to be printed to the client
+    std::string result{}; // stores the output to be printed to the client
     
     // Add namespace qualifier to all_channels
     for(auto channel_pair : chat::server::all_channels) {
@@ -187,9 +197,12 @@ namespace chat::server::command {
     // check if data is empty
     data.pop_back(); // remove '\0'
     data = trim(data); // remove whitespaces
+
+    std::string result{};
     if(data.empty() || data[0] != '/') {
       spdlog::warn("Invalid command given by user{}", client_file_descriptor);
-      return "Error: Invalid command";
+      result = "Error: Invalid command";
+      return result;
     }
 
     std::string command = get_command_input(data);
@@ -204,10 +217,11 @@ namespace chat::server::command {
       if(remaining_text.first == false) {
         spdlog::warn("/create by user{}: Channel name is empty", \
                     client_file_descriptor);
-        return "Error: Channel name cannot be empty";
+        result = "Error: Channel name cannot be empty";
+        return result;
       }
       return _execute_create(remaining_text.second, 
-              client_file_descriptor).second;
+              client_file_descriptor);
     }
     if(command == "join") {
       // the id of the channel client wants to join
@@ -215,10 +229,11 @@ namespace chat::server::command {
       if(next_parameter.first == false) {
         spdlog::warn("/join by user{}: Channel id is not an integer", \
           client_file_descriptor);
-        return "Error: Channel id should be an integer";
+        result = "Error: Channel id should be an integer";
+        return result;
       }
       return _execute_join(client_file_descriptor, 
-            next_parameter.second).second;
+            next_parameter.second);
     }
     if(command == "leave") {
       // the id of the channel client wants to join
@@ -226,10 +241,11 @@ namespace chat::server::command {
       if(next_parameter.first == false) {
         spdlog::warn("/leave by user{}: Channel id is not an integer", \
           client_file_descriptor);
-        return "Error: Channel id should be an integer";
+        result = "Error: Channel id should be an integer";
+        return result;
       }
       return _execute_leave(client_file_descriptor, 
-          next_parameter.second).second;
+          next_parameter.second);
     }
     if(command == "help") {
       return _execute_help(client_file_descriptor);
@@ -239,7 +255,8 @@ namespace chat::server::command {
     }
     
     spdlog::warn("Invalid command given by user{}", client_file_descriptor);
-    return "Error: Invalid command";
+    result = "Error Invalid command";
+    return result;
   }
 
   std::string trim(std::string data) {

@@ -24,10 +24,9 @@ namespace chat::server::command {
   // _execute_xyz means that some client asked to perform xyz command
 
   /*
-  Return: boolean to check whether the channel has been created.
-          std::string for data in a formatted order
+  Return: std::string for data in a formatted order
   */
-  std::pair<bool, std::string> _execute_create(
+  std::string _execute_create(
     std::string channel_name, /* name of the channel */
     int client_file_descriptor /* client that asked this request */
   );
@@ -39,19 +38,17 @@ namespace chat::server::command {
   );
 
   /*
-  Returns: pair of bool and data to be displayed to the client
-    bool signifies whether the client could join the channel
+  Returns: data to be displayed to the client
   */
-  std::pair<bool, std::string> _execute_join(
+  std::string _execute_join(
     int client_file_descriptor, /* client that asked this request */
     long long channel_id /* id of the channel client is requesting to join */
   );
 
   /*
-  Returns: pair of bool and data to be displayed to the client
-    bool signifies whether the client could leave the channel
+  Returns: data to be displayed to the client
   */
-  std::pair<bool, std::string> _execute_leave(
+  std::string _execute_leave(
     int client_file_descriptor, /* client that asked this request */
     long long channel_id /* id of the channel client wants to leave */
   );
