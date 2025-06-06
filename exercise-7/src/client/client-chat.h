@@ -52,6 +52,7 @@ namespace chat::client {
                             // the server
       sockaddr_in server_address_; // sockaddr_in struct to store the details
                             // of the ip address and port of the server
+      bool server_connected_; // check if the client is connected with the server
   };
   
 }

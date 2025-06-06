@@ -189,10 +189,16 @@ namespace chat::server {
       return;
     }
     std::string parsed_data;
-    parsed_data = command::parse_client_command(input_data, file_descriptor);
+    bool close_file_descriptor = false;
+    parsed_data = command::parse_client_command(input_data, file_descriptor,
+                                                close_file_descriptor);
 
     // write the message back
     write_data_to_client(file_descriptor, parsed_data);
+
+    if(close_file_descriptor) {
+      close_client_connection(file_descriptor);
+    }
   }
 
   void Server::write_data_to_client(int file_descriptor, std::string data) {

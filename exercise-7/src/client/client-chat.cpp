@@ -49,6 +49,9 @@ namespace chat::client {
           read_from_stdin();
         }
       }
+      if(server_connected_ == false) {
+        break;
+      }
     }
   }
 
@@ -58,6 +61,7 @@ namespace chat::client {
     // the program
     check_error(connect(client_socket_fd_, (sockaddr *) &server_address_, 
                   sizeof(server_address_)) < 0, "Connection Failed");
+    server_connected_ = true;
   }
 
   void Client::read_from_server() {
@@ -76,6 +80,8 @@ namespace chat::client {
     else if(bytes_read == 0) {
       // Server has closed the connection
       std::cout << "Server disconnected" << std::endl;
+      close(client_socket_fd_);
+      server_connected_ = false;
       return;
     }
     else {

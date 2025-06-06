@@ -40,6 +40,7 @@ namespace chat::server::command {
     std::vector<std::string> command_list = {
       "/create <channel_name>",
       "/help",
+      "/exit",
       "/join <channel_id>",
       "/leave <channel_id>",
       "/list",
@@ -192,8 +193,8 @@ namespace chat::server::command {
     return std::make_pair(true, data);
   }
 
-  std::string parse_client_command(
-    std::string data, int client_file_descriptor) {
+  std::string parse_client_command(std::string data, 
+    int client_file_descriptor, bool &close_file_descriptor) {
     // check if data is empty
     data.pop_back(); // remove '\0'
     data = trim(data); // remove whitespaces
@@ -223,6 +224,15 @@ namespace chat::server::command {
       return _execute_create(remaining_text.second, 
               client_file_descriptor);
     }
+    if(command == "help") {
+      return _execute_help(client_file_descriptor);
+    }
+    if(command == "exit") {
+      close_file_descriptor = true;
+      result = "Goodbye!";
+      spdlog::info("/exit by user{}", client_file_descriptor);
+      return result;
+    }
     if(command == "join") {
       // the id of the channel client wants to join
       std::pair<bool, long long> next_parameter = get_next_integer(parameters);
@@ -246,9 +256,6 @@ namespace chat::server::command {
       }
       return _execute_leave(client_file_descriptor, 
           next_parameter.second);
-    }
-    if(command == "help") {
-      return _execute_help(client_file_descriptor);
     }
     if(command == "list") {
       return _execute_list(client_file_descriptor);

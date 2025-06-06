@@ -101,8 +101,10 @@ namespace chat::server::command {
   */
   std::string parse_client_command(
     std::string data, /* data sent by the client */
-    int client_file_descriptor /* the file descriptor from which it was 
+    int client_file_descriptor, /* the file descriptor from which it was 
                                 sent */
+    bool &close_file_descriptor /* whether we need to close 
+                                client_file_descriptor */
   );
 
   /*
