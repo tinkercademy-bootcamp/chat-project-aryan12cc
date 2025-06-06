@@ -164,7 +164,7 @@ namespace chat::server {
   }
 
   void Server::parse_input_from_client(int file_descriptor) {
-    std::string input_data; // to store the input data
+    std::string input_data{}; // to store the input data
     while(true) {
       // read the message
       int bytes_read = read(file_descriptor, buffer,
@@ -181,18 +181,18 @@ namespace chat::server {
         }
         break;
       }
-
-      buffer[bytes_read] = '\0'; // null terminate
-
-      input_data = std::string(buffer, bytes_read);
+      input_data += std::string(buffer, bytes_read);
               // convert to std::string
-
-      std::string parsed_data;
-      parsed_data = command::parse_client_command(input_data, file_descriptor);
-
-      // write the message back
-      write_data_to_client(file_descriptor, parsed_data);
     }
+    // dont parse if there was an issue
+    if(input_data == "") {
+      return;
+    }
+    std::string parsed_data;
+    parsed_data = command::parse_client_command(input_data, file_descriptor);
+
+    // write the message back
+    write_data_to_client(file_descriptor, parsed_data);
   }
 
   void Server::write_data_to_client(int file_descriptor, std::string data) {

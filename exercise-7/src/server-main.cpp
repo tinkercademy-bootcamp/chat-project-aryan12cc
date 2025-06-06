@@ -15,6 +15,6 @@ int main() {
   #endif
   spdlog::set_default_logger(new_logger);
   spdlog::set_level(spdlog::level::debug);
-  spdlog::flush_on(spdlog::level::info);
+  spdlog::flush_on(spdlog::level::debug);
   chat::server::Server chat_server(LISTENING_PORT); 
 }

@@ -47,7 +47,7 @@ namespace chat::client {
       /* Function to read input from standard input */
       void read_from_stdin();
 
-      char buffer[BUF_SIZE]; // buffer for interactions with stdin / server
+      char buffer[BUF_SIZE + 1]; // buffer for interactions with stdin / server
       int client_socket_fd_; // file descriptor of the client to connect to
                             // the server
       sockaddr_in server_address_; // sockaddr_in struct to store the details

@@ -86,7 +86,7 @@ namespace chat::server {
         std::string output /* The output the be written */
       );
 
-      char buffer[BUF_SIZE]; // buffer for interactions with the client
+      char buffer[BUF_SIZE + 1]; // buffer for interactions with the client
       int epoll_fd_; // file descriptor for epoll used to monitor multiple
                     // sockets
 
