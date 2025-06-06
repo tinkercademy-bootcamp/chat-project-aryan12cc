@@ -22,6 +22,10 @@ BUILD_DIR := build
 SRC_DIR := src
 LOG_DIR := logs
 
+# Timestamp the log file
+TIMESTAMP := $(shell date +%m-%d-%H:%M:%S | tr ':' '_')
+LOG_FILE := $(LOG_DIR)/log-$(TIMESTAMP).log
+
 # Find all the C and C++ files we want to compile
 # Note the single quotes around the * expressions. The shell will incorrectly expand these otherwise, but we want to send the * directly to the find command.
 
@@ -44,11 +48,14 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 # The -MMD and -MP flags together generate Makefiles for us!
 # See https://scottmcpeak.com/autodepend/autodepend.html for more information.
 # These files will have .d instead of .o as the output.
-CPPFLAGS := $(INC_FLAGS) -MMD -MP
+CPPFLAGS := $(INC_FLAGS) -MMD -MP -DLOG_FILE=\"$(LOG_FILE)\"
+all: $(BUILD_DIR)/server $(BUILD_DIR)/client | $(LOG_FILE)
 
-all: $(BUILD_DIR)/server $(BUILD_DIR)/client
+# Ensure log file and directory exist
+$(LOG_FILE):
 	mkdir -p $(LOG_DIR)
-	
+	touch $(LOG_FILE)
+
 $(BUILD_DIR)/server: $(BUILD_DIR)/src/server-main.cpp.o $(NON_MAIN_OBJS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(BUILD_DIR)/src/server-main.cpp.o $(NON_MAIN_OBJS) -o $(BUILD_DIR)/server $(LDFLAGS)
 
@@ -70,7 +77,6 @@ print-vars:
 .PHONY: clean
 clean:
 	rm -r $(BUILD_DIR)
-	rm -r $(LOG_DIR)
 
 # Include the .d makefiles. The - at the front suppresses the errors of missing
 # Makefiles. Initially, all the .d files will be missing, and we don't want those
