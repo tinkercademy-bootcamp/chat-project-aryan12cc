@@ -102,7 +102,7 @@ namespace chat::server::command {
       or there was some error
     std::string contains the formatted data to be shown to the client 
   */
-  std::pair<bool, std::string> parse_client_command(
+  std::string parse_client_command(
     std::string data, /* data sent by the client */
     int client_file_descriptor /* the file descriptor from which it was 
                                 sent */

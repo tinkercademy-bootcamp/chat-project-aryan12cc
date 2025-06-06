@@ -187,11 +187,11 @@ namespace chat::server {
       input_data = std::string(buffer, bytes_read);
               // convert to std::string
 
-      std::pair<bool, std::string> parsed_data;
+      std::string parsed_data;
       parsed_data = command::parse_client_command(input_data, file_descriptor);
 
       // write the message back
-      write_data_to_client(file_descriptor, parsed_data.second);
+      write_data_to_client(file_descriptor, parsed_data);
     }
   }
 

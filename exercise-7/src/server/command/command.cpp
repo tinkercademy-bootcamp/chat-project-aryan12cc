@@ -70,12 +70,12 @@ namespace chat::server::command {
 
     // success
     if(channel_object.add_member(client_file_descriptor)) {
-      spdlog::info("/join by user{}: Channel {} successfully joined", \ 
+      spdlog::info("/join by user{}: Channel {} successfully joined", \
         client_file_descriptor, channel_id);
       return std::make_pair(true, "Joined the channel");
     }
     // failure (already in the channel)
-    spdlog::warn("/join by user{}: User already present in channel {}", \ 
+    spdlog::warn("/join by user{}: User already present in channel {}", \
       client_file_descriptor, channel_id);
     return std::make_pair(false, "You are already in the channel");
   }
@@ -182,14 +182,14 @@ namespace chat::server::command {
     return std::make_pair(true, data);
   }
 
-  std::pair<bool, std::string> parse_client_command(
+  std::string parse_client_command(
     std::string data, int client_file_descriptor) {
     // check if data is empty
     data.pop_back(); // remove '\0'
     data = trim(data); // remove whitespaces
     if(data.empty() || data[0] != '/') {
       spdlog::warn("Invalid command given by user{}", client_file_descriptor);
-      return std::make_pair(false, "Error: Invalid command");
+      return "Error: Invalid command";
     }
 
     std::string command = get_command_input(data);
@@ -204,9 +204,10 @@ namespace chat::server::command {
       if(remaining_text.first == false) {
         spdlog::warn("/create by user{}: Channel name is empty", \
                     client_file_descriptor);
-        return std::make_pair(false, "Error: Channel name cannot be empty");
+        return "Error: Channel name cannot be empty";
       }
-      return _execute_create(remaining_text.second, client_file_descriptor);
+      return _execute_create(remaining_text.second, 
+              client_file_descriptor).second;
     }
     if(command == "join") {
       // the id of the channel client wants to join
@@ -214,9 +215,10 @@ namespace chat::server::command {
       if(next_parameter.first == false) {
         spdlog::warn("/join by user{}: Channel id is not an integer", \
           client_file_descriptor);
-        return std::make_pair(false, "Error: Channel id should be an integer");
+        return "Error: Channel id should be an integer";
       }
-      return _execute_join(client_file_descriptor, next_parameter.second);
+      return _execute_join(client_file_descriptor, 
+            next_parameter.second).second;
     }
     if(command == "leave") {
       // the id of the channel client wants to join
@@ -224,19 +226,20 @@ namespace chat::server::command {
       if(next_parameter.first == false) {
         spdlog::warn("/leave by user{}: Channel id is not an integer", \
           client_file_descriptor);
-        return std::make_pair(false, "Error: Channel id should be an integer");
+        return "Error: Channel id should be an integer";
       }
-      return _execute_leave(client_file_descriptor, next_parameter.second);
+      return _execute_leave(client_file_descriptor, 
+          next_parameter.second).second;
     }
     if(command == "help") {
-      return std::make_pair(true, _execute_help(client_file_descriptor));
+      return _execute_help(client_file_descriptor);
     }
     if(command == "list") {
-      return std::make_pair(true, _execute_list(client_file_descriptor));
+      return _execute_list(client_file_descriptor);
     }
     
     spdlog::warn("Invalid command given by user{}", client_file_descriptor);
-    return std::make_pair(false, "Error: Invalid command");
+    return "Error: Invalid command";
   }
 
   std::string trim(std::string data) {
